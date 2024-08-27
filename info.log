@@ -1,0 +1,3 @@
+2024-08-26 17:25:52 INFO app.go:19 Application started
+2024-08-26 17:25:52 INFO app.go:19 Connected to Postgres
+2024-08-26 17:25:52 INFO app.go:19 Connected to Redis

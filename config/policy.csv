@@ -1,0 +1,4 @@
+p, unauthorized, /game/complete_level, POST
+p, unauthorized, /user/register, POST
+p, unauthorized, /game/start_level, POST
+

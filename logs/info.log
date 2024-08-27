@@ -1,0 +1,6 @@
+2024-08-26 17:24:16 INFO app.go:19 Application started
+2024-08-26 17:24:16 INFO app.go:19 Connected to Postgres
+2024-08-26 17:24:16 INFO app.go:19 Connected to Redis
+2024-08-26 17:24:46 INFO /home/javohir/Documents/Go_month_6/Athlevo/Auth-Athlevo/internal/app/app.go:19 Application started
+2024-08-26 17:24:46 INFO /home/javohir/Documents/Go_month_6/Athlevo/Auth-Athlevo/internal/app/app.go:19 Connected to Postgres
+2024-08-26 17:24:46 INFO /home/javohir/Documents/Go_month_6/Athlevo/Auth-Athlevo/internal/app/app.go:19 Connected to Redis
