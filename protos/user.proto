@@ -16,11 +16,14 @@ service UserService{
 message UserRes{
     string Id = 1;
     string Username = 2;
-    string Email = 3;
-    string FullName = 4;
-    string DateOfBirth = 5;
-    string Role = 6;
+    string FaceId = 3;
+    string PhoneNumber = 4;
+    string Email = 5;
+    string FullName = 6;
+    string DateOfBirth = 7;
+    string Role = 8;
 }
+
 
 message EditProfileReqBpdy {
     string Username = 1;

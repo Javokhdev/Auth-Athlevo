@@ -22,6 +22,7 @@ func NewAuthRepo(db *sql.DB) *AuthRepo {
 
 func (r *AuthRepo) Register(req *pb.RegisterReq) (*pb.RegisterRes, error) {
 	res := &pb.RegisterRes{Message: "User registered successfully"}
+	fmt.Println(res)
 
 	tr, err := r.db.Begin()
 	if err!= nil {
@@ -29,8 +30,9 @@ func (r *AuthRepo) Register(req *pb.RegisterReq) (*pb.RegisterRes, error) {
     }
 
 	var id string
-	query := `INSERT INTO users (username, email, password, full_name, date_of_birth) VALUES ($1, $2, $3, $4, $5) RETURNING id`
-	err = tr.QueryRow(query, req.Username, req.Email, req.Password, req.FullName, req.DateOfBirth).Scan(&id)
+	fmt.Println(req.Username, "----------------------------------")
+	query := `INSERT INTO users(username, face_id, phone_number, email, password, full_name, date_of_birth) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`
+	err = tr.QueryRow(query, req.Username, req.FaceId, req.PhoneNumber, req.Email, req.Password, req.FullName, req.DateOfBirth).Scan(&id)
 	if err != nil {
 		tr.Rollback()
 		return nil, err
@@ -122,37 +124,42 @@ func (r *AuthRepo) SaveRefreshToken(req *pb.RefToken) (*pb.SaveRefereshTokenRes,
 }
 
 func (r *AuthRepo) RefreshToken(req *pb.GetByEmail) (*pb.LoginRes, error) {
-	res := &pb.LoginRes{}
+    res := &pb.LoginRes{}
 
-	query := `SELECT token FROM tokens WHERE user_id = (SELECT id FROM users WHERE email = $1)`
-	var tokenString string
-	err := r.db.QueryRow(query, req.Email).Scan(&tokenString)
-	if err != nil {
-		if err == sql.ErrNoRows {
+    query := `SELECT token FROM tokens WHERE user_id = (SELECT id FROM users WHERE email = $1)`
+    var tokenString string
+    err := r.db.QueryRow(query, req.Email).Scan(&tokenString)
+    if err != nil {
+        if err == sql.ErrNoRows {
             return nil, fmt.Errorf("token not found for user with email: %s", req.Email)
         }
-		return nil, err
-	}
-
-    claims, err :=token.ExtractClaim(tokenString)
-	if err!= nil {
         return nil, err
     }
 
-	id := claims["user_id"].(string)
-	username, _ := claims["username"].(string)
-	email, _ := claims["email"].(string)
-	role, _ := claims["role"].(string)
+    claims, err := token.ExtractClaim(tokenString)
+    if err != nil {
+        return nil, err
+    }
 
-	res, _ = token.GenerateJWTToken(&pb.User{
-		Id:       id,
+    id := claims["user_id"].(string)
+    username, _ := claims["username"].(string)
+    email, _ := claims["email"].(string)
+    role, _ := claims["role"].(string)
+
+    res, _, err = token.GenerateJWTToken(&pb.User{
+        Id:       id,
         Username: username,
         Email:    email,
         Role:     role,
-	})
+    })
+
+    if err != nil {
+        return nil, err
+    }
 
     return res, nil
 }
+
 
 func (r *AuthRepo) ChangeRole(req *pb.Role) (*pb.ChangeRoleRes, error) {
 	res := &pb.ChangeRoleRes{Message: "Role changed successfully"}

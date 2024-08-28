@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -38,47 +37,38 @@ var (
 func (h *Handlers) RegisterUser(c *gin.Context) {
 	var body auth.RegisterReq
 	if err := c.BindJSON(&body); err != nil {
-		log.Printf("failed to bind JSON: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "internal server error", "details": err.Error()})
+		log.Printf("Failed to bind JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request data", "details": err.Error()})
 		return
 	}
 
-	password, err := t.HashPassword(body.Password)
+	// Validate email format
+	if !isValidEmail(body.Email) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid email format"})
+		return
+	}
+
+	// Validate phone number format
+	if !isValidPhoneNumber(body.PhoneNumber) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid phone number format"})
+		return
+	}
+
+	// Hash the password
+	hashedPassword, err := t.HashPassword(body.Password)
 	if err != nil {
 		log.Printf("failed to hash password: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to hash password", "details": err.Error()})
 		return
 	}
-
-	req := &auth.RegisterReq{
-		Username:    body.Username,
-		Email:       body.Email,
-		Password:    password,
-		FullName:    body.FullName,
-		DateOfBirth: body.DateOfBirth,
-	}
-
-	if !isValidEmail(req.Email) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid email format"})
-	}
-
-	if !isValidPhoneNumber(req.PhoneNumber) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid phone number format"})
-	}
-
-	input, err := json.Marshal(req)
+	body.Password = hashedPassword
+	res, err := h.Auth.Register(context.Background(), &body)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "internal server error", "details": err.Error()})
-		return
-	}
-
-	err = h.Producer.ProduceMessages("reg-user", input)
-	if err != nil {
+		log.Printf("failed to register user: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
-		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
+	c.JSON(http.StatusOK, res)
 }
 
 // LoginUser handles user login
@@ -107,7 +97,12 @@ func (h *Handlers) LoginUser(c *gin.Context) {
 		return
 	}
 
-	token, refToken := t.GenerateJWTToken(res)
+	token, refToken, err := t.GenerateJWTToken(res)
+	if err != nil {
+		log.Printf("failed to generate token: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
 
 	_, err = h.Auth.SaveRefreshToken(context.Background(), &auth.RefToken{UserId: res.Id, Token: refToken})
 	if err != nil {
@@ -199,7 +194,7 @@ func (h *Handlers) ResetPassword(c *gin.Context) {
 
 	req.NewPassword = password
 
-	email, err := h.RDB.Get(context.Background(), req.ResetToken).Result()
+	email, err := h.RDB.Get(context.Background(), req.EmailCode).Result()
 	if err == redis.Nil {
 		log.Printf("forgot password code not found in Redis: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})

@@ -51,13 +51,13 @@ message GetByEmail {
 }
 
 message ResetPassReq {
-    string reset_token = 1;
+    string email_code = 1;
     string email = 2;
     string new_password = 3;
 }
 
 message ResetPassReqBody {
-    string reset_token = 1;
+    string sent_code = 1;
     string new_password = 2;
 }
 

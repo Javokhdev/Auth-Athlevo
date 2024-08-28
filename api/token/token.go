@@ -3,17 +3,17 @@ package token
 import (
 	"errors"
 	"fmt"
-	"log"
 	"time"
 
-	"github.com/golang-jwt/jwt"
 	pb "auth-athlevo/genproto/auth"
+
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 )
 
 const signingKey = "secret_key"
 
-func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string) {
+func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string, error) {
 	accessToken := jwt.New(jwt.SigningMethodHS256)
 	refreshToken := jwt.New(jwt.SigningMethodHS256)
 
@@ -23,20 +23,22 @@ func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string) {
 	claims["role"] = user.Role
 	claims["iat"] = time.Now().Unix()
 	claims["exp"] = time.Now().Add(180 * time.Minute).Unix()
+
 	access, err := accessToken.SignedString([]byte(signingKey))
 	if err != nil {
-		log.Fatal("error while generating access token: ", err)
+		return nil, "", fmt.Errorf("error generating access token: %w", err)
 	}
- 
+
 	rftClaims := refreshToken.Claims.(jwt.MapClaims)
 	rftClaims["user_id"] = user.Id
-	claims["email"] = user.Email
-	claims["role"] = user.Role
+	rftClaims["email"] = user.Email
+	rftClaims["role"] = user.Role
 	rftClaims["iat"] = time.Now().Unix()
 	rftClaims["exp"] = time.Now().Add(48 * time.Hour).Unix()
+
 	refresh, err := refreshToken.SignedString([]byte(signingKey))
 	if err != nil {
-		log.Fatal("error while generating refresh token: ", err)
+		return nil, "", fmt.Errorf("error generating refresh token: %w", err)
 	}
 
 	res := &pb.LoginRes{
@@ -44,7 +46,7 @@ func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string) {
 		ExpiresAt: time.Now().Add(180 * time.Minute).Format("2006-01-02 15:04:05"),
 	}
 
-	return res, refresh
+	return res, refresh, nil
 }
 
 func ValidateToken(tokenStr string) (bool, error) {

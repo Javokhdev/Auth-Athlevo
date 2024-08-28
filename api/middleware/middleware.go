@@ -13,101 +13,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// func Middleware() gin.HandlerFunc {
-// 	return func(ctx *gin.Context) {
-// 		url := (ctx.Request.URL.Path)
+const (
+	ContextUserID = "userID"
+	ContextRole   = "role"
+)
 
-// 		if strings.Contains(url, "swagger") || (url == "/auth/login") || (url == "/auth/register") {
-// 			ctx.Next()
-// 			return
-// 		}
-// 		ctx.Next()
-// 	}
-// }
-
-// func JWTMiddleware() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		authHeader := c.GetHeader("Authorization")
-// 		if authHeader == "" {
-// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		// if !strings.HasPrefix(authHeader, "Bearer ") {
-// 		// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization header format"})
-// 		// 	c.Abort()
-// 		// 	return
-// 		// }
-
-// 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-
-// 		valid, err := t.ValidateToken(tokenString)
-// 		if err != nil || !valid {
-// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "details": err.Error()})
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		claims, err := t.ExtractClaim(tokenString)
-// 		if err != nil {
-// 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims", "details": err.Error()})
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		c.Set("claims", claims)
-// 		c.Next()
-// 	}
-// }
-
-// func GetUserId(r *http.Request) (string, error) {
-// 	jwtToken := r.Header.Get("Authorization")
-
-// 	if jwtToken == "" || strings.Contains(jwtToken, "Basic") {
-// 		return "unauthorized", nil
-// 	}
-
-// 	// if !strings.HasPrefix(jwtToken, "Bearer ") {
-// 	// 	return "unauthorized", errors.New("invalid authorization header format")
-// 	// }
-
-// 	// tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
-
-// 	claims, err := t.ExtractClaim(jwtToken)
-// 	if err != nil {
-// 		log.Println("Error while extracting claims: ", err)
-// 		return "unauthorized", err
-// 	}
-
-// 	userID, ok := claims["user_id"].(string)
-// 	if !ok {
-// 		return "unauthorized", errors.New("user_id claim not found")
-// 	}
-// 	return userID, nil
-// }
-
-// func InvalidToken(c *gin.Context) {
-// 	c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-// 		"error": "Invalid token !!!",
-// 	})
-// }
-
-// func RequirePermission(c *gin.Context) {
-// 	c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-// 		"error": "Permission denied",
-// 	})
-// }
-
-// func RequireRefresh(c *gin.Context) {
-// 	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-// 		"error": "Access token expired",
-// 	})
-// }
-
-// Initialize Casbin Enforcer
 func CasbinEnforcer() *casbin.Enforcer {
-	e, err := casbin.NewEnforcer("path/to/casbin_model.conf", "path/to/casbin_policy.csv")
+	e, err := casbin.NewEnforcer("config/model.conf", "config/policy.csv")
 	if err != nil {
 		log.Fatalf("Failed to initialize Casbin enforcer: %v", err)
 	}
@@ -124,13 +36,13 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if !strings.HasPrefix(authHeader, "Bearer ") {
+		if !strings.HasPrefix(authHeader, "") {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization header format"})
 			c.Abort()
 			return
 		}
 
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+		tokenString := strings.TrimPrefix(authHeader, "")
 
 		valid, err := token.ValidateToken(tokenString)
 		if err != nil || !valid {
@@ -146,12 +58,22 @@ func JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Extract and set userID and role in context
-		userID, _ := claims["user_id"].(string)
-		role, _ := claims["role"].(string)
+		userID, ok := claims["user_id"].(string)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user_id claim"})
+			c.Abort()
+			return
+		}
 
-		c.Set("userID", userID)
-		c.Set("role", role)
+		role, ok := claims["role"].(string)
+		if !ok {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid role claim"})
+			c.Abort()
+			return
+		}
+
+		c.Set(ContextUserID, userID)
+		c.Set(ContextRole, role)
 
 		c.Next()
 	}
@@ -160,10 +82,11 @@ func JWTMiddleware() gin.HandlerFunc {
 // Casbin Middleware for RBAC
 func CasbinMiddleware(enforcer *casbin.Enforcer) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userRole := c.GetString("role") // Retrieve role from context
+		userRole := c.GetString(ContextRole)
 
 		allowed, err := enforcer.Enforce(userRole, c.Request.URL.Path, c.Request.Method)
 		if err != nil {
+			log.Println("Casbin enforcement error:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error enforcing access control"})
 			c.Abort()
 			return
@@ -187,11 +110,11 @@ func GetUserId(r *http.Request) (string, error) {
 		return "", errors.New("unauthorized")
 	}
 
-	if !strings.HasPrefix(jwtToken, "Bearer ") {
+	if !strings.HasPrefix(jwtToken, "") {
 		return "", errors.New("invalid authorization header format")
 	}
 
-	tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
+	tokenString := strings.TrimPrefix(jwtToken, "")
 
 	claims, err := token.ExtractClaim(tokenString)
 	if err != nil {
@@ -209,7 +132,7 @@ func GetUserId(r *http.Request) (string, error) {
 // Error handlers
 func InvalidToken(c *gin.Context) {
 	c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-		"error": "Invalid token !!!",
+		"error": "Invalid token",
 	})
 }
 

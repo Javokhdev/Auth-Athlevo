@@ -655,7 +655,7 @@ const docTemplate = `{
                 "new_password": {
                     "type": "string"
                 },
-                "reset_token": {
+                "sent_code": {
                     "type": "string"
                 }
             }
@@ -697,10 +697,16 @@ const docTemplate = `{
                 "Email": {
                     "type": "string"
                 },
+                "FaceId": {
+                    "type": "string"
+                },
                 "FullName": {
                     "type": "string"
                 },
                 "Id": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
                     "type": "string"
                 },
                 "Role": {

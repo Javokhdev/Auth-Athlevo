@@ -1,4 +1,13 @@
-p, unauthorized, /game/complete_level, POST
-p, unauthorized, /user/register, POST
-p, unauthorized, /game/start_level, POST
+p, unauthorized, /register, POST
+p, unauthorized, /login, POST
+p, unauthorized, /forgot-password, POST
+p, unauthorized, /reset-passwowrd, POST
+p, unauthorized, /refresh-token, GET
+p, admin, /change-role, PUT
 
+p, admin, /user/profiles, GET
+p, admin, /user/profiles, PUT
+p, admin, /user/passwords, PUT
+p, admin, /user/setting, GET
+p, admin, /user/settting, PUT
+p, admin, /user, DELETE

@@ -6,8 +6,8 @@ import (
 )
 
 func isValidPhoneNumber(phoneNumber string) bool {
-	// Regex pattern to match valid phone numbers
-	const phoneRegexPattern = `^\+?[0-9]{1,3}?[-.\s]?(\(?[0-9]{1,4}?\))?[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,9}$`
+	// Updated regex pattern for international phone numbers
+	const phoneRegexPattern = `^\+\d{1,15}$`
 
 	re := regexp.MustCompile(phoneRegexPattern)
 	return re.MatchString(phoneNumber)

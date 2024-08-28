@@ -23,11 +23,13 @@ func (r *UserRepo) GetProfile(req *pb.GetById) (*pb.UserRes, error) {
 	res := &pb.UserRes{}
 
 	var date string
-	query := `SELECT id, username, email, full_name, date_of_birth, role FROM users WHERE id = $1`
+	query := `SELECT id, username, face_id, phone_number, email, full_name, date_of_birth, role FROM users WHERE id = $1`
 	err := r.db.QueryRow(query, req.Id).
 		Scan(
 			&res.Id,
 			&res.Username,
+			&res.FaceId,
+			&res.PhoneNumber,
 			&res.Email,
 			&res.FullName,
 			&date,
@@ -55,6 +57,16 @@ func (r *UserRepo) EditProfile(req *pb.UserRes) (*pb.UserRes, error) {
 	if req.Username != "" && req.Username != "string" {
 		arg = append(arg, req.Username)
 		conditions = append(conditions, fmt.Sprintf("username = $%d", len(arg)))
+	}
+
+	if req.PhoneNumber != "" && req.PhoneNumber != "string" {
+		arg = append(arg, req.PhoneNumber)
+		conditions = append(conditions, fmt.Sprintf("phone_number = $%d", len(arg)))
+	}
+
+	if req.FaceId != "" && req.FaceId != "string" {
+		arg = append(arg, req.FaceId)
+		conditions = append(conditions, fmt.Sprintf("face_id = $%d", len(arg)))
 	}
 
 	if req.Email != "" && req.Email != "string" {
