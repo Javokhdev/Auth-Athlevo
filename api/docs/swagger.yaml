@@ -46,6 +46,8 @@ definitions:
         type: string
       full_name:
         type: string
+      gym_id:
+        type: string
       password:
         type: string
       phone_number:
@@ -78,6 +80,13 @@ definitions:
       Theme:
         type: string
     type: object
+  auth.UserRepeated:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/auth.UserRes'
+        type: array
+    type: object
   auth.UserRes:
     properties:
       DateOfBirth:
@@ -87,6 +96,8 @@ definitions:
       FaceId:
         type: string
       FullName:
+        type: string
+      GymId:
         type: string
       Id:
         type: string
@@ -284,11 +295,17 @@ paths:
       summary: Reset password
       tags:
       - auth
-  /user:
+  /user/delete/{id}:
     delete:
       consumes:
       - application/json
       description: Delete a user with the specified ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -345,14 +362,39 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve the profile of a user with the specified ID
+      description: Retrieve user profiles with optional filters
+      parameters:
+      - description: Filter by user ID
+        in: query
+        name: id
+        type: string
+      - description: Filter by username
+        in: query
+        name: username
+        type: string
+      - description: Filter by full name
+        in: query
+        name: full_name
+        type: string
+      - description: Filter by email
+        in: query
+        name: email
+        type: string
+      - description: Filter by gym ID
+        in: query
+        name: gym_id
+        type: string
+      - description: Filter by phone number
+        in: query
+        name: phone_number
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.UserRes'
+            $ref: '#/definitions/auth.UserRepeated'
         "400":
           description: Bad Request
           schema:
@@ -363,7 +405,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get user profile
+      summary: Get user profiles
       tags:
       - users
     put:

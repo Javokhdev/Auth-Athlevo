@@ -294,7 +294,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user": {
+        "/user/delete/{id}": {
             "delete": {
                 "security": [
                     {
@@ -312,6 +312,15 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Delete user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "User deleted successfully",
@@ -392,7 +401,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Retrieve the profile of a user with the specified ID",
+                "description": "Retrieve user profiles with optional filters",
                 "consumes": [
                     "application/json"
                 ],
@@ -402,12 +411,50 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Get user profile",
+                "summary": "Get user profiles",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by user ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by username",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by full name",
+                        "name": "full_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by email",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by gym ID",
+                        "name": "gym_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by phone number",
+                        "name": "phone_number",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.UserRes"
+                            "$ref": "#/definitions/auth.UserRepeated"
                         }
                     },
                     "400": {
@@ -638,6 +685,9 @@ const docTemplate = `{
                 "full_name": {
                     "type": "string"
                 },
+                "gym_id": {
+                    "type": "string"
+                },
                 "password": {
                     "type": "string"
                 },
@@ -688,6 +738,17 @@ const docTemplate = `{
                 }
             }
         },
+        "auth.UserRepeated": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.UserRes"
+                    }
+                }
+            }
+        },
         "auth.UserRes": {
             "type": "object",
             "properties": {
@@ -701,6 +762,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "FullName": {
+                    "type": "string"
+                },
+                "GymId": {
                     "type": "string"
                 },
                 "Id": {

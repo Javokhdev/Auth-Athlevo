@@ -22,6 +22,7 @@ message UserRes{
     string FullName = 6;
     string DateOfBirth = 7;
     string Role = 8;
+    string GymId = 9;
 }
 
 
@@ -64,6 +65,14 @@ message Setting {
 
 message GetByIdReq {
     string Id = 1;
+    string Username = 2;
+    string FaceId = 3;
+    string PhoneNumber = 4;
+    string Email = 5;
+    string FullName = 6;
+    string DateOfBirth = 7;
+    string Role = 8;
+    string GymId = 9;
 }
 
 message GetSettingReq {
@@ -80,5 +89,9 @@ message DeleteRes {
 
 message SettingRes {
     string Message = 1;
+}
+
+message UserRepeated {
+    repeated UserRes users = 1;
 }
 

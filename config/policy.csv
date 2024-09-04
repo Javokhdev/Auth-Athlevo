@@ -10,4 +10,4 @@ p, admin, /user/profiles, PUT
 p, admin, /user/passwords, PUT
 p, admin, /user/setting, GET
 p, admin, /user/settting, PUT
-p, admin, /user, DELETE
+p, admin, /user/delete/:id, DELETE

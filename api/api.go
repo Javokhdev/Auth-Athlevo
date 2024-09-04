@@ -41,7 +41,7 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 		user.PUT("/passwords", handler.ChangePassword)
 		user.GET("/setting", handler.GetSetting)
 		user.PUT("/setting", handler.EditSetting)
-		user.DELETE("/", handler.DeleteUser)
+		user.DELETE("/delete/:id", handler.DeleteUser)
 	}
 
 	return router

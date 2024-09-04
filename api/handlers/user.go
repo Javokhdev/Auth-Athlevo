@@ -13,31 +13,42 @@ import (
 )
 
 // GetProfile godoc
-// @Summary Get user profile
-// @Description Retrieve the profile of a user with the specified ID
+// @Summary Get user profiles
+// @Description Retrieve user profiles with optional filters
 // @Tags users
 // @Accept json
 // @Produce json
+// @Param id query string false "Filter by user ID"
+// @Param username query string false "Filter by username"
+// @Param full_name query string false "Filter by full name"
+// @Param email query string false "Filter by email"
+// @Param gym_id query string false "Filter by gym ID"
+// @Param phone_number query string false "Filter by phone number"
 // @Security BearerAuth
-// @Success 200 {object} auth.UserRes
+// @Success 200 {object} auth.UserRepeated
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /user/profiles [get]
 func (h *Handlers) GetProfile(c *gin.Context) {
-	userID := getuserId(c)
-	req := &auth.GetById{
-		Id: userID,
+	req := &auth.GetByIdReq{
+		Id:       c.Query("id"),
+		Username: c.Query("username"),
+		FullName: c.Query("full_name"),
+		Email:    c.Query("email"),
+		GymId:    c.Query("gym_id"),
+		PhoneNumber: c.Query("phone_number"),
 	}
 
-	profile, err := h.User.GetProfile(c, req)
+	profiles, err := h.User.GetProfile(c, req)
 	if err != nil {
-		log.Println("Error getting profile:", err)
+		log.Println("Error getting profiles:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
 
-	c.JSON(http.StatusOK, profile)
+	c.JSON(http.StatusOK, profiles)
 }
+
 
 // EditProfile godoc
 // @Summary Edit user profile
@@ -216,12 +227,13 @@ func (h *Handlers) EditSetting(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
+// @Param id path string true "User ID"
 // @Success 200 {object} string "User deleted successfully"
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /user [delete]
+// @Router /user/delete/{id} [delete]
 func (h *Handlers) DeleteUser(c *gin.Context) {
-	userID := getuserId(c)
+	userID := c.Param("id")
 
 	req := &auth.GetById{
 		Id: userID,
@@ -235,3 +247,4 @@ func (h *Handlers) DeleteUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("User %s deleted successfully", req.Id)})
 }
+

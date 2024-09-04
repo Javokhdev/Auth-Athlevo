@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
+
+	pb "auth-athlevo/genproto/auth"
 
 	_ "github.com/lib/pq"
-	pb "auth-athlevo/genproto/auth"
 )
 
 type UserRepo struct {
@@ -19,15 +21,59 @@ func NewUserRepo(db *sql.DB) *UserRepo {
 	}
 }
 
-func (r *UserRepo) GetProfile(req *pb.GetById) (*pb.UserRes, error) {
-	res := &pb.UserRes{}
+func (r *UserRepo) GetProfile(req *pb.GetByIdReq) (*pb.UserRepeated, error) {
+	var users []*pb.UserRes
+	query := `SELECT id, username, face_id, gym_id, phone_number, email, full_name, date_of_birth, role FROM users WHERE 1=1`
 
-	var date string
-	query := `SELECT id, username, face_id, phone_number, email, full_name, date_of_birth, role FROM users WHERE id = $1`
-	err := r.db.QueryRow(query, req.Id).
-		Scan(
+	var args []interface{}
+	i := 1
+
+	if req.Id != "" {
+		query += fmt.Sprintf(" AND id = $%d", i)
+		args = append(args, req.Id)
+		i++
+	}
+	if req.Username != "" {
+		query += fmt.Sprintf(" AND username ILIKE $%d", i)
+		args = append(args, "%"+req.Username+"%")
+		i++
+	}
+	if req.GymId != "" {
+		query += fmt.Sprintf(" AND gym_id = $%d", i)
+		args = append(args, req.GymId)
+		i++
+	}
+	if req.PhoneNumber != "" {
+		query += fmt.Sprintf(" AND phone_number ILIKE $%d", i)
+		args = append(args, "%"+req.PhoneNumber+"%")
+		i++
+	}
+
+	if req.FullName != "" {
+		query += fmt.Sprintf(" AND full_name ILIKE $%d", i)
+		args = append(args, "%"+req.FullName+"%")
+		i++
+	}
+	if req.Email != "" {
+		query += fmt.Sprintf(" AND email ILIKE $%d", i)
+		args = append(args, "%"+req.Email+"%")
+		i++
+	}
+	// Add other filters as needed (e.g., FaceId, PhoneNumber, DateOfBirth, Role)
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var res pb.UserRes
+		var date string
+		err = rows.Scan(
 			&res.Id,
 			&res.Username,
+			&res.GymId,
 			&res.FaceId,
 			&res.PhoneNumber,
 			&res.Email,
@@ -35,15 +81,18 @@ func (r *UserRepo) GetProfile(req *pb.GetById) (*pb.UserRes, error) {
 			&date,
 			&res.Role,
 		)
-	if err == sql.ErrNoRows {
-		return nil, err
-	} else if err != nil {
+		if err != nil {
+			return nil, err
+		}
+		res.DateOfBirth = date[:10]
+		users = append(users, &res)
+	}
+
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
 
-	res.DateOfBirth = date[:10]
-
-	return res, nil
+	return &pb.UserRepeated{Users: users}, nil
 }
 
 func (r *UserRepo) EditProfile(req *pb.UserRes) (*pb.UserRes, error) {
@@ -67,6 +116,11 @@ func (r *UserRepo) EditProfile(req *pb.UserRes) (*pb.UserRes, error) {
 	if req.FaceId != "" && req.FaceId != "string" {
 		arg = append(arg, req.FaceId)
 		conditions = append(conditions, fmt.Sprintf("face_id = $%d", len(arg)))
+	}
+
+	if req.GymId != "" && req.GymId != "string" {
+		arg = append(arg, req.GymId)
+		conditions = append(conditions, fmt.Sprintf("gym_id = $%d", len(arg)))
 	}
 
 	if req.Email != "" && req.Email != "string" {
@@ -187,8 +241,8 @@ func (r *UserRepo) EditSetting(req *pb.SettingReq) (*pb.SettingRes, error) {
 func (r *UserRepo) DeleteUser(req *pb.GetById) (*pb.DeleteRes, error) {
 	res := &pb.DeleteRes{Message: "User deleted successfully"}
 
-	query := `UPDATE users SET deleted_at = EXTRACT(EPOCH FROM NOW()) WHERE id = $1`
-	_, err := r.db.Exec(query, req.Id)
+	query := `UPDATE users SET deleted_at = $1 WHERE id = $2`
+	_, err := r.db.Exec(query, time.Now().Unix(), req.Id)
 	if err != nil {
 		return nil, err
 	}

@@ -84,7 +84,7 @@ func CasbinMiddleware(enforcer *casbin.Enforcer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userRole := c.GetString(ContextRole)
 
-		allowed, err := enforcer.Enforce(userRole, c.Request.URL.Path, c.Request.Method)
+		allowed, err := enforcer.Enforce(userRole, c.FullPath(), c.Request.Method)
 		if err != nil {
 			log.Println("Casbin enforcement error:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error enforcing access control"})

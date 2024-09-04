@@ -18,7 +18,7 @@ type AuthI interface {
 }
 
 type UserI interface {
-	GetProfile(*pb.GetById) (*pb.UserRes, error)
+	GetProfile(*pb.GetByIdReq) (*pb.UserRepeated, error)
     EditProfile(*pb.UserRes) (*pb.UserRes, error)
     ChangePassword(*pb.ChangePasswordReq) (*pb.ChangePasswordRes, error)
     GetSetting(*pb.GetById) (*pb.Setting, error)

@@ -18,7 +18,7 @@ func NewUserService(storage *st.Storage) *UserService {
 	}
 }
 
-func (s *UserService) GetProfile(ctx context.Context, req *pb.GetById) (*pb.UserRes, error) {
+func (s *UserService) GetProfile(ctx context.Context, req *pb.GetByIdReq) (*pb.UserRepeated, error) {
 	res, err := s.storage.UserS.GetProfile(req)
 	if err != nil {
 		return nil, err
