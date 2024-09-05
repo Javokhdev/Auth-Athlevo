@@ -4,8 +4,6 @@ services:
   auth-service:
     container_name: auth
     build: .
-    depends_on:
-      - postgres-db
 
     ports:
       - "8090:8090"

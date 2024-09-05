@@ -17,6 +17,8 @@ RUN apk add --no-cache ca-certificates
 WORKDIR /app
 
 COPY --from=builder /app/auth .
+COPY --from=builder /app/config/model.conf ./config/
+COPY --from=builder /app/config/policy.csv ./config/
 COPY .env . 
 
 RUN chmod +x auth
