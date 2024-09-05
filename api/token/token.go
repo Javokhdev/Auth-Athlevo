@@ -43,7 +43,7 @@ func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string, error) {
 
 	res := &pb.LoginRes{
 		Token:     access,
-		ExpiresAt: time.Now().Add(180 * time.Minute).Format("2006-01-02 15:04:05"),
+		ExpiresAt: time.Now().Add(1800 * time.Minute).Format("2006-01-02 15:04:05"),
 	}
 
 	return res, refresh, nil
