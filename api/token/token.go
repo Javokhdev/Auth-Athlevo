@@ -22,7 +22,7 @@ func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string, error) {
 	claims["email"] = user.Email
 	claims["role"] = user.Role
 	claims["iat"] = time.Now().Unix()
-	claims["exp"] = time.Now().Add(180 * time.Minute).Unix()
+	claims["exp"] = time.Now().Add(18000 * time.Minute).Unix()
 
 	access, err := accessToken.SignedString([]byte(signingKey))
 	if err != nil {
@@ -43,7 +43,7 @@ func GenerateJWTToken(user *pb.User) (*pb.LoginRes, string, error) {
 
 	res := &pb.LoginRes{
 		Token:     access,
-		ExpiresAt: time.Now().Add(1800 * time.Minute).Format("2006-01-02 15:04:05"),
+		ExpiresAt: time.Now().Add(18000 * time.Minute).Format("2006-01-02 15:04:05"),
 	}
 
 	return res, refresh, nil
