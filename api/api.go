@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -26,7 +27,13 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	protected := router.Group("/")
 	protected.Use(middleware.JWTMiddleware(), middleware.CasbinMiddleware(ca))
-
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	router.POST("/register", handler.RegisterUser)
 	router.POST("/login", handler.LoginUser)
 	router.POST("/forgot-password", handler.ForgotPassword)

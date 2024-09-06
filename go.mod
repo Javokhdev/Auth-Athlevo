@@ -7,6 +7,7 @@ toolchain go1.22.6
 require (
 	github.com/azizbek-qodirov/logger v1.0.6
 	github.com/casbin/casbin/v2 v2.98.0
+	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-redis/redis/v8 v8.11.5
