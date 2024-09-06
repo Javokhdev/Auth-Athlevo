@@ -206,14 +206,14 @@ paths:
       summary: Login a user
       tags:
       - auth
-  /refresh-token:
+  /refresh-token/{email}:
     get:
       consumes:
       - application/json
       description: Request to reset user's access token
       parameters:
       - description: Email
-        in: query
+        in: path
         name: email
         required: true
         type: string

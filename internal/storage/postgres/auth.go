@@ -111,17 +111,23 @@ func (r *AuthRepo) ResetPassword(req *pb.ResetPassReq) (*pb.ResetPasswordRes, er
 }
 
 func (r *AuthRepo) SaveRefreshToken(req *pb.RefToken) (*pb.SaveRefereshTokenRes, error) {
-	res := &pb.SaveRefereshTokenRes{Message: "Token saved successfully"}
+    res := &pb.SaveRefereshTokenRes{Message: "Token saved successfully"}
 
-    query := `INSERT INTO tokens (user_id, token) VALUES ($1, $2)`
+    // Use INSERT ... ON CONFLICT to handle insert or update
+    query := `
+    INSERT INTO tokens (user_id, token) 
+    VALUES ($1, $2)
+    ON CONFLICT (user_id) 
+    DO UPDATE SET token = $3`
 
-    _, err := r.db.Exec(query, req.UserId, req.Token)
+    _, err := r.db.Exec(query, req.UserId, req.Token, req.Token)
     if err != nil {
         return nil, err
     }
 
     return res, nil
 }
+
 
 func (r *AuthRepo) RefreshToken(req *pb.GetByEmail) (*pb.LoginRes, error) {
     res := &pb.LoginRes{}

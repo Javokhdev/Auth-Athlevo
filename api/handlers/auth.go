@@ -219,20 +219,20 @@ func (h *Handlers) ResetPassword(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param email query string true "Email"
+// @Param email path string true "Email"
 // @Success 200 {object} auth.LoginRes
 // @Failure 400 {string} string "Invalid request"
 // @Failure 500 {string} string "Internal server error"
-// @Router /refresh-token [get]
+// @Router /refresh-token/{email} [get]
 func (h *Handlers) RefreshToken(c *gin.Context) {
-	email := c.Query("email")
+	email := c.Param("email")
 	req := auth.GetByEmail{
 		Email: email,
 	}
 
 	res, err := h.Auth.RefreshToken(context.Background(), &req)
 	if err != nil {
-		log.Printf("failed to refresh token: %v", err)
+		log.Printf("failed to refresh token: %s", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
 		return
 	}

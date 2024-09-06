@@ -158,7 +158,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/refresh-token": {
+        "/refresh-token/{email}": {
             "get": {
                 "description": "Request to reset user's access token",
                 "consumes": [
@@ -176,7 +176,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Email",
                         "name": "email",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
