@@ -14,81 +14,81 @@ service UserService{
 }
 
 message UserRes{
-    string Id = 1;
-    string Username = 2;
-    string FaceId = 3;
-    string PhoneNumber = 4;
-    string Email = 5;
-    string FullName = 6;
-    string DateOfBirth = 7;
-    string Role = 8;
-    string GymId = 9;
+    string id = 1;
+    string username = 2;
+    string face_id = 3;
+    string phone_number = 4;
+    string email = 5;
+    string full_name = 6;
+    string date_of_birth = 7;
+    string role = 8;
+    string gym_id = 9;
 }
 
 
 message EditProfileReqBpdy {
-    string Username = 1;
-    string Email = 2;
-    string FullName = 3;
-    string DateOfBirth = 4;
+    string username = 1;
+    string email = 2;
+    string full_name = 3;
+    string date_of_birth = 4;
 }
 
 message ChangePasswordReq{
-    string Id = 1;
-    string CurrentPassword = 2;
-    string NewPassword = 3;
+    string id = 1;
+    string current_password = 2;
+    string new_password = 3;
 }
 
 message ChangePasswordRes{
-    string Message = 1;
+    string message = 1;
 }
 
 message ChangePasswordReqBody{
-    string CurrentPassword = 1;
-    string NewPassword = 2;
+    string current_password = 1;
+    string new_password = 2;
 }
 
 message SettingReq {
-    string Id = 1;
-    string PrivacyLevel = 2;
-    string Notification = 3;
-    string Language = 4;
-    string Theme = 5;
+    string id = 1;
+    string privacy_level = 2;
+    string notification = 3;
+    string language = 4;
+    string theme = 5;
 }
 
 message Setting {
-    string PrivacyLevel = 1;
-    string Notification = 2;
-    string Language = 3;
-    string Theme = 4;
+    string privacy_level = 1;
+    string notification = 2;
+    string language = 3;
+    string theme = 4;
 }
 
 message GetByIdReq {
-    string Id = 1;
-    string Username = 2;
-    string FaceId = 3;
-    string PhoneNumber = 4;
-    string Email = 5;
-    string FullName = 6;
-    string DateOfBirth = 7;
-    string Role = 8;
-    string GymId = 9;
+    string id = 1;
+    string username = 2;
+    string face_id = 3;
+    string phone_number = 4;
+    string email = 5;
+    string full_name = 6;
+    string date_of_birth = 7;
+    string role = 8;
+    string gym_id = 9;
 }
 
 message GetSettingReq {
-    string Id = 1;
+    string id = 1;
 }
 
 message DeleteReq {
-    string Id = 1;
+    string id = 1;
 }
 
 message DeleteRes {
-    string Message = 1;
+    string message = 1;
 }
 
 message SettingRes {
-    string Message = 1;
+    string message = 1;
 }
 
 message UserRepeated {

@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS settings (
 -- TOKEN
 CREATE TABLE IF NOT EXISTS tokens (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL UNIQUE REFERENCES users(id),
+    user_id UUID NOT NULL REFERENCES users(id),
     token VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),

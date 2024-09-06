@@ -1,20 +1,20 @@
 definitions:
   auth.ChangePasswordReqBody:
     properties:
-      CurrentPassword:
+      current_password:
         type: string
-      NewPassword:
+      new_password:
         type: string
     type: object
   auth.EditProfileReqBpdy:
     properties:
-      DateOfBirth:
+      date_of_birth:
         type: string
-      Email:
+      email:
         type: string
-      FullName:
+      full_name:
         type: string
-      Username:
+      username:
         type: string
     type: object
   auth.GetByEmail:
@@ -71,13 +71,13 @@ definitions:
     type: object
   auth.Setting:
     properties:
-      Language:
+      language:
         type: string
-      Notification:
+      notification:
         type: string
-      PrivacyLevel:
+      privacy_level:
         type: string
-      Theme:
+      theme:
         type: string
     type: object
   auth.UserRepeated:
@@ -89,23 +89,23 @@ definitions:
     type: object
   auth.UserRes:
     properties:
-      DateOfBirth:
+      date_of_birth:
         type: string
-      Email:
+      email:
         type: string
-      FaceId:
+      face_id:
         type: string
-      FullName:
+      full_name:
         type: string
-      GymId:
+      gym_id:
         type: string
-      Id:
+      id:
         type: string
-      PhoneNumber:
+      phone_number:
         type: string
-      Role:
+      role:
         type: string
-      Username:
+      username:
         type: string
     type: object
 info:

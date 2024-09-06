@@ -615,10 +615,10 @@ const docTemplate = `{
         "auth.ChangePasswordReqBody": {
             "type": "object",
             "properties": {
-                "CurrentPassword": {
+                "current_password": {
                     "type": "string"
                 },
-                "NewPassword": {
+                "new_password": {
                     "type": "string"
                 }
             }
@@ -626,16 +626,16 @@ const docTemplate = `{
         "auth.EditProfileReqBpdy": {
             "type": "object",
             "properties": {
-                "DateOfBirth": {
+                "date_of_birth": {
                     "type": "string"
                 },
-                "Email": {
+                "email": {
                     "type": "string"
                 },
-                "FullName": {
+                "full_name": {
                     "type": "string"
                 },
-                "Username": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -724,16 +724,16 @@ const docTemplate = `{
         "auth.Setting": {
             "type": "object",
             "properties": {
-                "Language": {
+                "language": {
                     "type": "string"
                 },
-                "Notification": {
+                "notification": {
                     "type": "string"
                 },
-                "PrivacyLevel": {
+                "privacy_level": {
                     "type": "string"
                 },
-                "Theme": {
+                "theme": {
                     "type": "string"
                 }
             }
@@ -752,31 +752,31 @@ const docTemplate = `{
         "auth.UserRes": {
             "type": "object",
             "properties": {
-                "DateOfBirth": {
+                "date_of_birth": {
                     "type": "string"
                 },
-                "Email": {
+                "email": {
                     "type": "string"
                 },
-                "FaceId": {
+                "face_id": {
                     "type": "string"
                 },
-                "FullName": {
+                "full_name": {
                     "type": "string"
                 },
-                "GymId": {
+                "gym_id": {
                     "type": "string"
                 },
-                "Id": {
+                "id": {
                     "type": "string"
                 },
-                "PhoneNumber": {
+                "phone_number": {
                     "type": "string"
                 },
-                "Role": {
+                "role": {
                     "type": "string"
                 },
-                "Username": {
+                "username": {
                     "type": "string"
                 }
             }

@@ -172,3 +172,6 @@
 2024-09-05 15:25:47 INFO app.go:19 Application started
 2024-09-05 15:25:47 INFO app.go:19 Connected to Postgres
 2024-09-05 15:25:47 INFO app.go:19 Connected to Redis
+2024-09-06 19:22:51 INFO app.go:19 Application started
+2024-09-06 19:22:51 INFO app.go:19 Connected to Postgres
+2024-09-06 19:22:51 INFO app.go:19 Connected to Redis
