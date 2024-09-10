@@ -57,9 +57,9 @@ definitions:
     type: object
   auth.ResetPassReqBody:
     properties:
-      new_password:
+      email_code:
         type: string
-      sent_code:
+      new_password:
         type: string
     type: object
   auth.Role:
@@ -266,7 +266,7 @@ paths:
       tags:
       - auth
   /reset-password:
-    post:
+    put:
       consumes:
       - application/json
       description: Reset user's password with a reset code

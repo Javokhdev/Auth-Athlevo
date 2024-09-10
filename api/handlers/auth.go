@@ -176,7 +176,7 @@ func (h *Handlers) ForgotPassword(c *gin.Context) {
 // @Success 200 {string} string "Password reset successfully"
 // @Failure 400 {string} string "invalid request"
 // @Failure 500 {string} string "internal server error"
-// @Router /reset-password [post]
+// @Router /reset-password [put]
 func (h *Handlers) ResetPassword(c *gin.Context) {
 	var req auth.ResetPassReq
 	if err := c.BindJSON(&req); err != nil {
@@ -193,7 +193,6 @@ func (h *Handlers) ResetPassword(c *gin.Context) {
 	}
 
 	req.NewPassword = password
-
 	email, err := h.RDB.Get(context.Background(), req.EmailCode).Result()
 	if err == redis.Nil {
 		log.Printf("forgot password code not found in Redis: %v", err)

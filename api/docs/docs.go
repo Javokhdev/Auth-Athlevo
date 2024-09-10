@@ -249,7 +249,7 @@ const docTemplate = `{
             }
         },
         "/reset-password": {
-            "post": {
+            "put": {
                 "description": "Reset user's password with a reset code",
                 "consumes": [
                     "application/json"
@@ -702,10 +702,10 @@ const docTemplate = `{
         "auth.ResetPassReqBody": {
             "type": "object",
             "properties": {
-                "new_password": {
+                "email_code": {
                     "type": "string"
                 },
-                "sent_code": {
+                "new_password": {
                     "type": "string"
                 }
             }

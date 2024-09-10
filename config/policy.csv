@@ -1,7 +1,7 @@
 p, unauthorized, /register, POST
 p, unauthorized, /login, POST
 p, unauthorized, /forgot-password, POST
-p, unauthorized, /reset-passwowrd, POST
+p, unauthorized, /reset-passwowrd, PUT
 p, unauthorized, /refresh-token/:email, GET
 p, admin, /change-role, PUT
 

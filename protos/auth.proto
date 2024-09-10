@@ -58,8 +58,8 @@ message ResetPassReq {
 }
 
 message ResetPassReqBody {
-    string sent_code = 1;
-    string new_password = 2;
+    string email_code = 2;
+    string new_password = 3;
 }
 
 message Params {

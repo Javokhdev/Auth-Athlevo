@@ -37,7 +37,7 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 	router.POST("/register", handler.RegisterUser)
 	router.POST("/login", handler.LoginUser)
 	router.POST("/forgot-password", handler.ForgotPassword)
-	router.POST("/reset-password", handler.ResetPassword)
+	router.PUT("/reset-password", handler.ResetPassword)
 	router.GET("/refresh-token/:email", handler.RefreshToken)
 	protected.PUT("/change-role", handler.ChangeRole)
 
