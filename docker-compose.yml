@@ -37,4 +37,3 @@ networks:
     external: true
     name: global-network
     driver: bridge
-
