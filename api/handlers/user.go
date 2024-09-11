@@ -6,10 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	_ "auth-athlevo/api/docs"
 	t "auth-athlevo/api/token"
 	auth "auth-athlevo/genproto/auth"
+
+	"github.com/gin-gonic/gin"
 )
 
 // GetProfile godoc
@@ -31,11 +32,11 @@ import (
 // @Router /user/profiles [get]
 func (h *Handlers) GetProfile(c *gin.Context) {
 	req := &auth.GetByIdReq{
-		Id:       c.Query("id"),
-		Username: c.Query("username"),
-		FullName: c.Query("full_name"),
-		Email:    c.Query("email"),
-		GymId:    c.Query("gym_id"),
+		Id:          c.Query("id"),
+		Username:    c.Query("username"),
+		FullName:    c.Query("full_name"),
+		Email:       c.Query("email"),
+		GymId:       c.Query("gym_id"),
 		PhoneNumber: c.Query("phone_number"),
 	}
 
@@ -49,7 +50,6 @@ func (h *Handlers) GetProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, profiles)
 }
 
-
 // EditProfile godoc
 // @Summary Edit user profile
 // @Description Update the profile of a user with the specified ID
@@ -57,13 +57,14 @@ func (h *Handlers) GetProfile(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
+// Param id query string true "User ID"
 // @Param profile body auth.EditProfileReqBpdy true "Updated profile details"
 // @Success 200 {object} string "Profile updated successfully"
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /user/profiles [put]
 func (h *Handlers) EditProfile(c *gin.Context) {
-	userID := getuserId(c)
+	userID := c.Query("id")
 
 	var body auth.EditProfileReqBpdy
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -247,4 +248,3 @@ func (h *Handlers) DeleteUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("User %s deleted successfully", req.Id)})
 }
-
