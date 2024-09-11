@@ -57,28 +57,17 @@ func (h *Handlers) GetProfile(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// Param id query string true "User ID"
 // @Param profile body auth.EditProfileReqBpdy true "Updated profile details"
 // @Success 200 {object} string "Profile updated successfully"
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /user/profiles [put]
 func (h *Handlers) EditProfile(c *gin.Context) {
-	userID := c.Query("id")
-
-	var body auth.EditProfileReqBpdy
-	if err := c.ShouldBindJSON(&body); err != nil {
+	var req auth.EditProfileReqBpdy
+	if err := c.ShouldBindJSON(&req); err != nil {
 		log.Println("Error binding JSON:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
 		return
-	}
-
-	req := &auth.UserRes{
-		Id:          userID,
-		Username:    body.Username,
-		Email:       body.Email,
-		FullName:    body.FullName,
-		DateOfBirth: body.DateOfBirth,
 	}
 
 	input, err := json.Marshal(req)

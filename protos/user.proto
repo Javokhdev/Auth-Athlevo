@@ -6,7 +6,7 @@ package auth;
 
 service UserService{
     rpc GetProfile(GetByIdReq) returns (UserRes);
-    rpc EditProfile(UserRes) returns (UserRes);
+    rpc EditProfile(EditProfileReqBpdy) returns (UserRes);
     rpc ChangePassword(ChangePasswordReq) returns (ChangePasswordRes);
     rpc GetSetting(GetSettingReq) returns (Setting);
     rpc EditSetting(SettingReq) returns (SettingRes);
@@ -27,10 +27,14 @@ message UserRes{
 
 
 message EditProfileReqBpdy {
-    string username = 1;
-    string email = 2;
-    string full_name = 3;
-    string date_of_birth = 4;
+    string id = 1;
+    string username = 2;
+    string face_id = 3;
+    string phone_number = 4;
+    string email = 5;
+    string full_name = 6;
+    string date_of_birth = 7;
+    string gym_id = 8;
 }
 
 message ChangePasswordReq{

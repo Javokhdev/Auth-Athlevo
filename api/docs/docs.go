@@ -632,7 +632,19 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "face_id": {
+                    "type": "string"
+                },
                 "full_name": {
+                    "type": "string"
+                },
+                "gym_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "phone_number": {
                     "type": "string"
                 },
                 "username": {
