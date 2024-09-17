@@ -111,7 +111,12 @@ func (h *Handlers) LoginUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, token)
+	role, err := md.GetRole(ctx.Request)
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": token,
+		"role":  role,
+	})
 }
 
 // ForgotPassword handles forgot password functionality

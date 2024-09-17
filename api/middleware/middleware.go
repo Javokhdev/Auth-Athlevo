@@ -129,6 +129,32 @@ func GetUserId(r *http.Request) (string, error) {
 	return userID, nil
 }
 
+func GetRole(r *http.Request) (string, error) {
+	jwtToken := r.Header.Get("Authorization")
+
+	if jwtToken == "" || strings.Contains(jwtToken, "Basic") {
+		return "", errors.New("unauthorized")
+	}
+
+	if !strings.HasPrefix(jwtToken, "") {
+		return "", errors.New("invalid authorization header format")
+	}
+
+	tokenString := strings.TrimPrefix(jwtToken, "")
+
+	claims, err := token.ExtractClaim(tokenString)
+	if err != nil {
+		log.Println("Error while extracting claims:", err)
+		return "", err
+	}
+
+	role, ok := claims["role"].(string)
+	if !ok {
+		return "", errors.New("role claim not found")
+	}
+	return role, nil
+}
+
 // Error handlers
 func InvalidToken(c *gin.Context) {
 	c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
