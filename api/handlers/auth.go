@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
+	"auth-athlevo/api/token"
 	t "auth-athlevo/api/token"
 	"auth-athlevo/genproto/auth"
 
@@ -283,4 +285,62 @@ func getuserId(ctx *gin.Context) string {
 		return ""
 	}
 	return user_id
+}
+
+// Validate godoc
+// @Summary      Validate Token
+// @Description  Validates a JWT token and returns the user ID and role.
+// @Tags         users
+// @Security     BearerAuth
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  map[string]interface{}
+// @Failure      401  {object}  map[string]interface{}
+// @Router       /validate [get]
+func (h *Handlers) Validate(c *gin.Context) {
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header required"})
+		c.Abort()
+		return
+	}
+
+	if !strings.HasPrefix(authHeader, "") {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization header format"})
+		c.Abort()
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "")
+
+	valid, err := token.ValidateToken(tokenString)
+	if err != nil || !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token", "details": err.Error()})
+		c.Abort()
+		return
+	}
+
+	claims, err := token.ExtractClaim(tokenString)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims", "details": err.Error()})
+		c.Abort()
+		return
+	}
+
+	userID, ok := claims["user_id"].(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid user_id claim"})
+		c.Abort()
+		return
+	}
+	role, ok := claims["role"].(string)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid role claim"})
+		c.Abort()
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"id":   userID,
+		"role": role,
+	})
 }

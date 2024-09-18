@@ -503,6 +503,29 @@ paths:
       summary: Edit user settings
       tags:
       - users
+  /validate:
+    get:
+      consumes:
+      - application/json
+      description: Validates a JWT token and returns the user ID and role.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Validate Token
+      tags:
+      - users
 securityDefinitions:
   BearerAuth:
     in: header

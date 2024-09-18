@@ -40,7 +40,7 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 	router.PUT("/reset-password", handler.ResetPassword)
 	router.GET("/refresh-token/:email", handler.RefreshToken)
 	protected.PUT("/change-role", handler.ChangeRole)
-
+	router.GET("/validate", handler.Validate)
 	user := router.Group("/user").Use(middleware.JWTMiddleware(), middleware.CasbinMiddleware(ca))
 	{
 		user.GET("/profiles", handler.GetProfile)
