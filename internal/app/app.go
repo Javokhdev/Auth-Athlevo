@@ -32,6 +32,7 @@ func Run(cfg *config.Config) {
 	if err != nil {
 		logger.ERROR.Printf("can't connect to db: %v", err)
 	}
+	defer db.Db.Close()
 	logger.INFO.Println("Connected to Postgres")
 
 	// Redis Connection

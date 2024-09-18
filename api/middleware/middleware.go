@@ -133,24 +133,18 @@ func GetRole(r *http.Request) (string, error) {
 	jwtToken := r.Header.Get("Authorization")
 
 	if jwtToken == "" || strings.Contains(jwtToken, "Basic") {
-		return "", errors.New("unauthorized")
+		return "unauthorized", nil
 	}
 
-	if !strings.HasPrefix(jwtToken, "") {
-		return "", errors.New("invalid authorization header format")
-	}
-
-	tokenString := strings.TrimPrefix(jwtToken, "")
-
-	claims, err := token.ExtractClaim(tokenString)
+	claims, err := token.ExtractClaim(jwtToken)
 	if err != nil {
-		log.Println("Error while extracting claims:", err)
-		return "", err
+		log.Println("Error while extracting claims: ", err)
+		return "unauthorized", err
 	}
 
 	role, ok := claims["role"].(string)
 	if !ok {
-		return "", errors.New("role claim not found")
+		return "unauthorized", errors.New("role claim not found")
 	}
 	return role, nil
 }
