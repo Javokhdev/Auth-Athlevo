@@ -111,7 +111,7 @@ func (h *Handlers) LoginUser(c *gin.Context) {
 		return
 	}
 
-	role, err := md.GetRole(ctx.Request)
+	role, err := md.GetRole(c.Request)
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
