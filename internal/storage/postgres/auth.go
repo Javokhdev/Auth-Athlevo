@@ -125,6 +125,15 @@ func (r *AuthRepo) SaveRefreshToken(req *pb.RefToken) (*pb.SaveRefereshTokenRes,
         return nil, err
     }
 
+	query = `SELECT role FROM users WHERE user_id = $1`
+	var role string
+	err = r.db.QueryRow(query, req.UserId).Scan(&role)
+	if err!= nil {
+        return nil, err
+    }
+
+	res.Role = role
+
     return res, nil
 }
 

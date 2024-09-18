@@ -94,6 +94,7 @@ message ChangeRoleRes {
 
 message SaveRefereshTokenRes {
     string Message = 1;
+    string Role = 2;
 }
 
 message ForgotPassRes {

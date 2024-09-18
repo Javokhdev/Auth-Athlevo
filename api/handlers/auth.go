@@ -104,14 +104,14 @@ func (h *Handlers) LoginUser(c *gin.Context) {
 		return
 	}
 
-	_, err = h.Auth.SaveRefreshToken(context.Background(), &auth.RefToken{UserId: res.Id, Token: refToken})
+	resp, err := h.Auth.SaveRefreshToken(context.Background(), &auth.RefToken{UserId: res.Id, Token: refToken})
 	if err != nil {
 		log.Printf("failed to refresh token: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
 		return
 	}
 
-	role, err := md.GetRole(c.Request)
+	role := resp.Role
 
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
