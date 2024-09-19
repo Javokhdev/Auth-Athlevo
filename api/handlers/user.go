@@ -70,17 +70,32 @@ func (h *Handlers) EditProfile(c *gin.Context) {
 		return
 	}
 
-	input, err := json.Marshal(req)
+	_, err := h.User.EditProfile(c, &auth.UserRes{
+		Id:          req.Id,
+		Username:    req.Username,
+		FullName:    req.FullName,
+		Email:       req.Email,
+		PhoneNumber: req.PhoneNumber,
+		DateOfBirth: req.DateOfBirth,
+		GymId:       req.GymId,
+	})
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "internal server error"})
-		return
-	}
-
-	err = h.Producer.ProduceMessages("upd-user", input)
-	if err != nil {
+		log.Println("Error editing profile:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 		return
 	}
+
+	// input, err := json.Marshal(req)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "internal server error"})
+	// 	return
+	// }
+
+	// err = h.Producer.ProduceMessages("upd-user", input)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Profile for user %s updated successfully", req.Id)})
 }

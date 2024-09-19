@@ -23,7 +23,7 @@ func NewUserRepo(db *sql.DB) *UserRepo {
 
 func (r *UserRepo) GetProfile(req *pb.GetByIdReq) (*pb.UserRepeated, error) {
 	var users []*pb.UserRes
-	query := `SELECT id, username, face_id, gym_id, phone_number, email, full_name, date_of_birth, role FROM users WHERE 1=1`
+	query := `SELECT id, username, gym_id, phone_number, email, full_name, date_of_birth, role FROM users WHERE 1=1`
 
 	var args []interface{}
 	i := 1
@@ -74,7 +74,6 @@ func (r *UserRepo) GetProfile(req *pb.GetByIdReq) (*pb.UserRepeated, error) {
 			&res.Id,
 			&res.Username,
 			&res.GymId,
-			&res.FaceId,
 			&res.PhoneNumber,
 			&res.Email,
 			&res.FullName,
@@ -111,11 +110,6 @@ func (r *UserRepo) EditProfile(req *pb.UserRes) (*pb.UserRes, error) {
 	if req.PhoneNumber != "" && req.PhoneNumber != "string" {
 		arg = append(arg, req.PhoneNumber)
 		conditions = append(conditions, fmt.Sprintf("phone_number = $%d", len(arg)))
-	}
-
-	if req.FaceId != "" && req.FaceId != "string" {
-		arg = append(arg, req.FaceId)
-		conditions = append(conditions, fmt.Sprintf("face_id = $%d", len(arg)))
 	}
 
 	if req.GymId != "" && req.GymId != "string" {

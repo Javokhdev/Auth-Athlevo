@@ -21,8 +21,7 @@ message RegisterReq {
     string full_name = 4;
     string date_of_birth = 5;
     string phone_number = 6;
-    string face_id = 7;
-    string gym_id = 8;
+    string gym_id = 7;
 }
 
 message RegisterRes {

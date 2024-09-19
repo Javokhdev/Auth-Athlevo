@@ -9,22 +9,22 @@ import (
 	"auth-athlevo/service"
 )
 
-func UserEditProfileHandler(u *service.UserService) func(message []byte) {
-	return func(message []byte) {
-		var user pb.UserRes
-		if err := json.Unmarshal(message, &user); err != nil {
-			log.Printf("Cannot unmarshal JSON: %v", err)
-			return
-		}
+// func UserEditProfileHandler(u *service.UserService) func(message []byte) {
+// 	return func(message []byte) {
+// 		var user pb.UserRes
+// 		if err := json.Unmarshal(message, &user); err != nil {
+// 			log.Printf("Cannot unmarshal JSON: %v", err)
+// 			return
+// 		}
 
-		_, err := u.EditProfile(context.Background(), &user)
-		if err != nil {
-			log.Printf("failed to edit user via Kafka: %v", err)
-			return
-		}
-		log.Printf("User updated")
-	}
-}
+// 		_, err := u.EditProfile(context.Background(), &user)
+// 		if err != nil {
+// 			log.Printf("failed to edit user via Kafka: %v", err)
+// 			return
+// 		}
+// 		log.Printf("User updated")
+// 	}
+// }
 
 func UserEditPasswordHandler(u *service.UserService) func(message []byte) {
 	return func(message []byte) {

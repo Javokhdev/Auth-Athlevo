@@ -662,9 +662,6 @@
                 "email": {
                     "type": "string"
                 },
-                "face_id": {
-                    "type": "string"
-                },
                 "full_name": {
                     "type": "string"
                 },
@@ -719,9 +716,6 @@
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "face_id": {
                     "type": "string"
                 },
                 "full_name": {
@@ -798,9 +792,6 @@
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "face_id": {
                     "type": "string"
                 },
                 "full_name": {

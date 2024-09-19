@@ -670,9 +670,6 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "face_id": {
-                    "type": "string"
-                },
                 "full_name": {
                     "type": "string"
                 },
@@ -727,9 +724,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "face_id": {
                     "type": "string"
                 },
                 "full_name": {
@@ -806,9 +800,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email": {
-                    "type": "string"
-                },
-                "face_id": {
                     "type": "string"
                 },
                 "full_name": {

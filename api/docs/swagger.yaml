@@ -12,8 +12,6 @@ definitions:
         type: string
       email:
         type: string
-      face_id:
-        type: string
       full_name:
         type: string
       gym_id:
@@ -49,8 +47,6 @@ definitions:
       date_of_birth:
         type: string
       email:
-        type: string
-      face_id:
         type: string
       full_name:
         type: string
@@ -100,8 +96,6 @@ definitions:
       date_of_birth:
         type: string
       email:
-        type: string
-      face_id:
         type: string
       full_name:
         type: string
