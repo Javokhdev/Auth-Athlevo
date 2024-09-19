@@ -334,39 +334,7 @@ paths:
       summary: Delete user
       tags:
       - users
-  /user/passwords:
-    put:
-      consumes:
-      - application/json
-      description: Update the password of a user with the specified ID
-      parameters:
-      - description: Updated password details
-        in: body
-        name: password
-        required: true
-        schema:
-          $ref: '#/definitions/auth.ChangePasswordReqBody'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Password updated successfully
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Change user password
-      tags:
-      - users
-  /user/profiles:
+  /user/get-profiles:
     get:
       consumes:
       - application/json
@@ -416,6 +384,39 @@ paths:
       summary: Get user profiles
       tags:
       - users
+  /user/passwords:
+    put:
+      consumes:
+      - application/json
+      description: Update the password of a user with the specified ID
+      parameters:
+      - description: Updated password details
+        in: body
+        name: password
+        required: true
+        schema:
+          $ref: '#/definitions/auth.ChangePasswordReqBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password updated successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Change user password
+      tags:
+      - users
+  /user/profiles:
     put:
       consumes:
       - application/json
