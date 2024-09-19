@@ -3,12 +3,11 @@ CREATE TYPE role_type AS ENUM ('admin', 'user', 'owner','coach');
 -- USER TABLE
 CREATE TABLE IF NOT EXISTS users (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    face_id VARCHAR(255),
-    gym_id VARCHAR(255),
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    gym_id UUID NOT NULL,
+    username VARCHAR(50) UNIQUE,
+    email VARCHAR(100) UNIQUE,
     phone_number VARCHAR(20),
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255),
     full_name VARCHAR(100),
     date_of_birth DATE,
     role role_type NOT NULL DEFAULT 'user',
@@ -37,3 +36,8 @@ CREATE TABLE IF NOT EXISTS tokens (
     updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at BIGINT DEFAULT 0
 );
+
+
+
+
+

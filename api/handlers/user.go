@@ -29,7 +29,7 @@ import (
 // @Success 200 {object} auth.UserRepeated
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /user/profiles [get]
+// @Router /user/get-profiles [get]
 func (h *Handlers) GetProfile(c *gin.Context) {
 	req := &auth.GetByIdReq{
 		Id:          c.Query("id"),

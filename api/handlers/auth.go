@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"auth-athlevo/api/token"
-	t "auth-athlevo/api/token"
 	"auth-athlevo/genproto/auth"
 
 	"github.com/go-redis/redis"
@@ -57,7 +56,7 @@ func (h *Handlers) RegisterUser(c *gin.Context) {
 	}
 
 	// Hash the password
-	hashedPassword, err := t.HashPassword(body.Password)
+	hashedPassword, err := token.HashPassword(body.Password)
 	if err != nil {
 		log.Printf("failed to hash password: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to hash password", "details": err.Error()})
@@ -99,7 +98,7 @@ func (h *Handlers) LoginUser(c *gin.Context) {
 		return
 	}
 
-	token, refToken, err := t.GenerateJWTToken(res)
+	token, refToken, err := token.GenerateJWTToken(res)
 	if err != nil {
 		log.Printf("failed to generate token: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
@@ -192,7 +191,7 @@ func (h *Handlers) ResetPassword(c *gin.Context) {
 		return
 	}
 
-	password, err := t.HashPassword(req.NewPassword)
+	password, err := token.HashPassword(req.NewPassword)
 	if err != nil {
 		log.Printf("failed to hash password: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
