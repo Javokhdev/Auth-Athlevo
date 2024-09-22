@@ -51,5 +51,13 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 		user.DELETE("/delete/:id", handler.DeleteUser)
 	}
 
+	dashboard := router.Group("/dashboard").Use(middleware.JWTMiddleware(), middleware.CasbinMiddleware(ca))
+	{
+		dashboard.GET("/access-count", handler.GetPersonalAccessCount)
+        dashboard.GET("/booking-revenue", handler.GetTotalPersonalBookingRevenue)
+		dashboard.GET("/subscription/access-count", handler.GetAccessCountBySubscriptionID)
+		dashboard.GET("/subscription/booking-revenue", handler.GetBookingRevenueBySubscriptionID)
+	}
+
 	return router
 }
