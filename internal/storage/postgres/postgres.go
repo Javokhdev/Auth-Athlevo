@@ -8,15 +8,17 @@ import (
 
 	"golang.org/x/exp/slog"
 
-	_ "github.com/lib/pq"
 	"auth-athlevo/config"
+
+	_ "github.com/lib/pq"
 )
 
 type Storage struct {
-	Db      *sql.DB
-	OrderDb *sql.DB
-	AuthS   storage.AuthI
-	UserS   storage.UserI
+	Db         *sql.DB
+	OrderDb    *sql.DB
+	AuthS      storage.AuthI
+	UserS      storage.UserI
+	DashboardS storage.DashboardI
 }
 
 func NewPostgresStorage(config *config.Config) (*Storage, error) {
@@ -40,8 +42,9 @@ func NewPostgresStorage(config *config.Config) (*Storage, error) {
 	slog.Info("connected to db")
 
 	return &Storage{
-		Db:      db,
-		AuthS:   NewAuthRepo(db),
-		UserS:   NewUserRepo(db),
+		Db:         db,
+		AuthS:      NewAuthRepo(db),
+		UserS:      NewUserRepo(db),
+		DashboardS: NewDashboardRepo(db),
 	}, nil
 }

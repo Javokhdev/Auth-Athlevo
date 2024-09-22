@@ -10,19 +10,21 @@ import (
 )
 
 type Handlers struct {
-	Auth     *service.AuthService
-	User     *service.UserService
-	RDB      *redis.Client
-	Producer kafka.KafkaProducer
-	Logger   *logger.Logger
+	Auth      *service.AuthService
+	User      *service.UserService
+	Dashboard *service.DashboardService
+	RDB       *redis.Client
+	Producer  kafka.KafkaProducer
+	Logger    *logger.Logger
 }
 
-func NewHandler(auth *service.AuthService, user *service.UserService, rdb *redis.Client, pr *kafka.KafkaProducer, l *logger.Logger) *Handlers {
+func NewHandler(auth *service.AuthService, user *service.UserService, dashboard *service.DashboardService, rdb *redis.Client, pr *kafka.KafkaProducer, l *logger.Logger) *Handlers {
 	return &Handlers{
-		Auth:     auth,
-		User:     user,
-		RDB:      rdb,
-		Producer: *pr,
-		Logger:   l,
+		Auth:      auth,
+		User:      user,
+		Dashboard: dashboard,
+		RDB:       rdb,
+		Producer:  *pr,
+		Logger:    l,
 	}
 }

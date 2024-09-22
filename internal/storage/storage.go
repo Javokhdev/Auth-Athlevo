@@ -5,6 +5,7 @@ import pb "auth-athlevo/genproto/auth"
 type StorageI interface {
 	Auth() AuthI
 	User() UserI
+    Dashboard() DashboardI
 }
 
 type AuthI interface {
@@ -24,4 +25,11 @@ type UserI interface {
     GetSetting(*pb.GetById) (*pb.Setting, error)
     EditSetting(*pb.SettingReq) (*pb.SettingRes, error)
     DeleteUser(*pb.GetById) (*pb.DeleteRes, error)
+}
+
+type DashboardI interface { 
+    GetPersonalAccessCount(*pb.AccessCountReq) (*pb.AccessCountRes, error)
+    GetTotalPersonalBookingRevenue(*pb.TotalRevenueReq) (*pb.TotalRevenueRes, error)
+    GetAccessCountBySubscriptionID(*pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error)
+    GetBookingRevenueBySubscriptionID(*pb.TotalRevenueBySubscriptionReq) (*pb.TotalRevenueBySubscriptionRes, error)
 }

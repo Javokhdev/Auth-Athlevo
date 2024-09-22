@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option go_package = "genproto/auth";
+
+package auth;
+
+service DashboardService {
+    rpc GetPersonalAccessCount(AccessCountReq) returns (AccessCountRes);
+    rpc GetTotalPersonalBookingRevenue(TotalRevenueReq) returns (TotalRevenueRes);
+    rpc GetAccessCountBySubscriptionID(SubscriptionCountReq) returns (SubscriptionCountRes);
+    rpc GetBookingRevenueBySubscriptionID(TotalRevenueBySubscriptionReq) returns (TotalRevenueBySubscriptionRes);
+}
+
+message AccessCountReq {
+    string gymId = 1;
+    string startDate = 2;
+    string endDate = 3;
+}
+
+message AccessCountRes{
+    int32 count = 1;
+}
+
+message TotalRevenueReq {
+    string gymId = 1;
+    string startDate = 2;
+    string endDate = 3;
+}
+
+message TotalRevenueRes{
+    int32 totalRevenue = 1;
+}
+
+message SubscriptionCountReq {
+    string subscriptionID = 1;
+    string startDate = 2;
+    string endDate = 3;
+}
+
+message SubscriptionCountRes{
+    int32 count = 1;
+}
+
+message TotalRevenueBySubscriptionReq {
+    string subscriptionID = 1;
+    string startDate = 2;
+    string endDate = 3;
+}
+
+message TotalRevenueBySubscriptionRes{
+    int32 totalRevenue = 1;
+}

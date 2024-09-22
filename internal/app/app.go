@@ -49,6 +49,7 @@ func Run(cfg *config.Config) {
 
 	authService := service.NewAuthService(db)
 	userService := service.NewUserService(db)
+	dashboardService := service.NewDashboardService(db)
 
 	// Kafka
 	brokers := []string{"kafka:9092"}
@@ -62,7 +63,7 @@ func Run(cfg *config.Config) {
 	Reader(brokers, cm, authService, userService, logger)
 
 	// HTTP Server
-	h := handlers.NewHandler(authService, userService, rdb, &pr, logger)
+	h := handlers.NewHandler(authService, userService, dashboardService, rdb, &pr, logger)
 
 	router := api.Engine(h)
 	router.SetTrustedProxies(nil)
