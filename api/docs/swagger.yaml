@@ -205,6 +205,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get the access count of a gym
       tags:
       - dashboard
@@ -245,6 +247,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get total booking revenue for a gym
       tags:
       - dashboard
@@ -285,6 +289,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get the access count by subscription ID
       tags:
       - dashboard
@@ -325,6 +331,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Get booking revenue by subscription ID
       tags:
       - dashboard

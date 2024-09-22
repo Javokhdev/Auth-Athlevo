@@ -68,6 +68,11 @@ const docTemplate = `{
         },
         "/dashboard/access-count": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get the number of times a gym accessed the gym within the specified date range",
                 "consumes": [
                     "application/json"
@@ -126,6 +131,11 @@ const docTemplate = `{
         },
         "/dashboard/booking-revenue": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get the total booking revenue within the specified date range for a gym",
                 "consumes": [
                     "application/json"
@@ -184,6 +194,11 @@ const docTemplate = `{
         },
         "/dashboard/subscription/access-count": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get the number of times a user accessed the gym based on subscription ID within a date range",
                 "consumes": [
                     "application/json"
@@ -242,6 +257,11 @@ const docTemplate = `{
         },
         "/dashboard/subscription/booking-revenue": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get total booking revenue based on subscription ID within a date range",
                 "consumes": [
                     "application/json"

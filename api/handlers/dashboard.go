@@ -16,6 +16,7 @@ import (
 // @Tags dashboard
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param gym_id query string true "gym ID"
 // @Param start_date query string true "Start Date"
 // @Param end_date query string true "End Date"
@@ -55,6 +56,7 @@ func (h *Handlers) GetPersonalAccessCount(c *gin.Context) {
 // @Tags dashboard
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param gym_id query string true "gym ID"
 // @Param start_date query string true "Start Date"
 // @Param end_date query string true "End Date"
@@ -94,6 +96,7 @@ func (h *Handlers) GetTotalPersonalBookingRevenue(c *gin.Context) {
 // @Tags dashboard
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param subscription_id query string true "Subscription ID"
 // @Param start_date query string true "Start Date"
 // @Param end_date query string true "End Date"
@@ -133,6 +136,7 @@ func (h *Handlers) GetAccessCountBySubscriptionID(c *gin.Context) {
 // @Tags dashboard
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param subscription_id query string true "Subscription ID"
 // @Param start_date query string true "Start Date"
 // @Param end_date query string true "End Date"
