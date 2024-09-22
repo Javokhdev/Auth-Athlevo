@@ -58,6 +58,190 @@
                 }
             }
         },
+        "/dashboard/access-count": {
+            "get": {
+                "description": "Get the number of times a user accessed the gym within the specified date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the access count of a user",
+                "parameters": [
+                    {
+                        "description": "Access Count Request",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.AccessCountReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.AccessCountRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/booking-revenue": {
+            "get": {
+                "description": "Get the total booking revenue within the specified date range for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get total booking revenue for a user",
+                "parameters": [
+                    {
+                        "description": "Total Booking Revenue Request",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalRevenueReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalRevenueRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/subscription/access-count": {
+            "get": {
+                "description": "Get the number of times a user accessed the gym based on subscription ID within a date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the access count by subscription ID",
+                "parameters": [
+                    {
+                        "description": "Subscription Access Count Request",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.SubscriptionCountReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.SubscriptionCountRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/subscription/booking-revenue": {
+            "get": {
+                "description": "Get total booking revenue based on subscription ID within a date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get booking revenue by subscription ID",
+                "parameters": [
+                    {
+                        "description": "Total Booking Revenue By Subscription Request",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalRevenueBySubscriptionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalRevenueBySubscriptionRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/forgot-password": {
             "post": {
                 "description": "Request to reset user's password",
@@ -642,6 +826,28 @@
         }
     },
     "definitions": {
+        "auth.AccessCountReq": {
+            "type": "object",
+            "properties": {
+                "endDate": {
+                    "type": "string"
+                },
+                "gymId": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.AccessCountRes": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
         "auth.ChangePasswordReqBody": {
             "type": "object",
             "properties": {
@@ -771,6 +977,72 @@
                 },
                 "theme": {
                     "type": "string"
+                }
+            }
+        },
+        "auth.SubscriptionCountReq": {
+            "type": "object",
+            "properties": {
+                "endDate": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "subscriptionID": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.SubscriptionCountRes": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.TotalRevenueBySubscriptionReq": {
+            "type": "object",
+            "properties": {
+                "endDate": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "subscriptionID": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.TotalRevenueBySubscriptionRes": {
+            "type": "object",
+            "properties": {
+                "totalRevenue": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.TotalRevenueReq": {
+            "type": "object",
+            "properties": {
+                "endDate": {
+                    "type": "string"
+                },
+                "gymId": {
+                    "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.TotalRevenueRes": {
+            "type": "object",
+            "properties": {
+                "totalRevenue": {
+                    "type": "integer"
                 }
             }
         },
