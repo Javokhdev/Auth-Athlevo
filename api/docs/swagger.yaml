@@ -1,13 +1,4 @@
 definitions:
-  auth.AccessCountReq:
-    properties:
-      endDate:
-        type: string
-      gymId:
-        type: string
-      startDate:
-        type: string
-    type: object
   auth.AccessCountRes:
     properties:
       count:
@@ -98,42 +89,15 @@ definitions:
       theme:
         type: string
     type: object
-  auth.SubscriptionCountReq:
-    properties:
-      endDate:
-        type: string
-      startDate:
-        type: string
-      subscriptionID:
-        type: string
-    type: object
   auth.SubscriptionCountRes:
     properties:
       count:
         type: integer
     type: object
-  auth.TotalRevenueBySubscriptionReq:
-    properties:
-      endDate:
-        type: string
-      startDate:
-        type: string
-      subscriptionID:
-        type: string
-    type: object
   auth.TotalRevenueBySubscriptionRes:
     properties:
       totalRevenue:
         type: integer
-    type: object
-  auth.TotalRevenueReq:
-    properties:
-      endDate:
-        type: string
-      gymId:
-        type: string
-      startDate:
-        type: string
     type: object
   auth.TotalRevenueRes:
     properties:
@@ -208,15 +172,24 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get the number of times a user accessed the gym within the specified
+      description: Get the number of times a gym accessed the gym within the specified
         date range
       parameters:
-      - description: Access Count Request
-        in: body
-        name: req
+      - description: gym ID
+        in: query
+        name: gym_id
         required: true
-        schema:
-          $ref: '#/definitions/auth.AccessCountReq'
+        type: string
+      - description: Start Date
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date
+        in: query
+        name: end_date
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -232,7 +205,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Get the access count of a user
+      summary: Get the access count of a gym
       tags:
       - dashboard
   /dashboard/booking-revenue:
@@ -240,14 +213,23 @@ paths:
       consumes:
       - application/json
       description: Get the total booking revenue within the specified date range for
-        a user
+        a gym
       parameters:
-      - description: Total Booking Revenue Request
-        in: body
-        name: req
+      - description: gym ID
+        in: query
+        name: gym_id
         required: true
-        schema:
-          $ref: '#/definitions/auth.TotalRevenueReq'
+        type: string
+      - description: Start Date
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date
+        in: query
+        name: end_date
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -263,7 +245,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: Get total booking revenue for a user
+      summary: Get total booking revenue for a gym
       tags:
       - dashboard
   /dashboard/subscription/access-count:
@@ -273,12 +255,21 @@ paths:
       description: Get the number of times a user accessed the gym based on subscription
         ID within a date range
       parameters:
-      - description: Subscription Access Count Request
-        in: body
-        name: req
+      - description: Subscription ID
+        in: query
+        name: subscription_id
         required: true
-        schema:
-          $ref: '#/definitions/auth.SubscriptionCountReq'
+        type: string
+      - description: Start Date
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date
+        in: query
+        name: end_date
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -304,12 +295,21 @@ paths:
       description: Get total booking revenue based on subscription ID within a date
         range
       parameters:
-      - description: Total Booking Revenue By Subscription Request
-        in: body
-        name: req
+      - description: Subscription ID
+        in: query
+        name: subscription_id
         required: true
-        schema:
-          $ref: '#/definitions/auth.TotalRevenueBySubscriptionReq'
+        type: string
+      - description: Start Date
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date
+        in: query
+        name: end_date
+        required: true
+        type: string
       produces:
       - application/json
       responses:

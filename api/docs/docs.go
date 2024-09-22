@@ -68,7 +68,7 @@ const docTemplate = `{
         },
         "/dashboard/access-count": {
             "get": {
-                "description": "Get the number of times a user accessed the gym within the specified date range",
+                "description": "Get the number of times a gym accessed the gym within the specified date range",
                 "consumes": [
                     "application/json"
                 ],
@@ -78,16 +78,28 @@ const docTemplate = `{
                 "tags": [
                     "dashboard"
                 ],
-                "summary": "Get the access count of a user",
+                "summary": "Get the access count of a gym",
                 "parameters": [
                     {
-                        "description": "Access Count Request",
-                        "name": "req",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.AccessCountReq"
-                        }
+                        "type": "string",
+                        "description": "gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -114,7 +126,7 @@ const docTemplate = `{
         },
         "/dashboard/booking-revenue": {
             "get": {
-                "description": "Get the total booking revenue within the specified date range for a user",
+                "description": "Get the total booking revenue within the specified date range for a gym",
                 "consumes": [
                     "application/json"
                 ],
@@ -124,16 +136,28 @@ const docTemplate = `{
                 "tags": [
                     "dashboard"
                 ],
-                "summary": "Get total booking revenue for a user",
+                "summary": "Get total booking revenue for a gym",
                 "parameters": [
                     {
-                        "description": "Total Booking Revenue Request",
-                        "name": "req",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.TotalRevenueReq"
-                        }
+                        "type": "string",
+                        "description": "gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -173,13 +197,25 @@ const docTemplate = `{
                 "summary": "Get the access count by subscription ID",
                 "parameters": [
                     {
-                        "description": "Subscription Access Count Request",
-                        "name": "req",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.SubscriptionCountReq"
-                        }
+                        "type": "string",
+                        "description": "Subscription ID",
+                        "name": "subscription_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -219,13 +255,25 @@ const docTemplate = `{
                 "summary": "Get booking revenue by subscription ID",
                 "parameters": [
                     {
-                        "description": "Total Booking Revenue By Subscription Request",
-                        "name": "req",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.TotalRevenueBySubscriptionReq"
-                        }
+                        "type": "string",
+                        "description": "Subscription ID",
+                        "name": "subscription_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -834,20 +882,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.AccessCountReq": {
-            "type": "object",
-            "properties": {
-                "endDate": {
-                    "type": "string"
-                },
-                "gymId": {
-                    "type": "string"
-                },
-                "startDate": {
-                    "type": "string"
-                }
-            }
-        },
         "auth.AccessCountRes": {
             "type": "object",
             "properties": {
@@ -988,20 +1022,6 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.SubscriptionCountReq": {
-            "type": "object",
-            "properties": {
-                "endDate": {
-                    "type": "string"
-                },
-                "startDate": {
-                    "type": "string"
-                },
-                "subscriptionID": {
-                    "type": "string"
-                }
-            }
-        },
         "auth.SubscriptionCountRes": {
             "type": "object",
             "properties": {
@@ -1010,39 +1030,11 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.TotalRevenueBySubscriptionReq": {
-            "type": "object",
-            "properties": {
-                "endDate": {
-                    "type": "string"
-                },
-                "startDate": {
-                    "type": "string"
-                },
-                "subscriptionID": {
-                    "type": "string"
-                }
-            }
-        },
         "auth.TotalRevenueBySubscriptionRes": {
             "type": "object",
             "properties": {
                 "totalRevenue": {
                     "type": "integer"
-                }
-            }
-        },
-        "auth.TotalRevenueReq": {
-            "type": "object",
-            "properties": {
-                "endDate": {
-                    "type": "string"
-                },
-                "gymId": {
-                    "type": "string"
-                },
-                "startDate": {
-                    "type": "string"
                 }
             }
         },
