@@ -23,7 +23,7 @@ func NewDashboardRepo(db *sql.DB) *DashboardRepo {
 // GetPersonalAccessCount retrieves the count of access_personal records within a date range for a given gym.
 func (r *DashboardRepo) GetPersonalAccessCount(req *pb.AccessCountReq) (*pb.AccessCountRes, error) {
 	res := &pb.AccessCountRes{}
-
+	count := sql.NullInt32{}
 	query := `
 		WITH Subscriptions AS (
 			SELECT id
@@ -40,18 +40,20 @@ func (r *DashboardRepo) GetPersonalAccessCount(req *pb.AccessCountReq) (*pb.Acce
 		WHERE booking_id IN (SELECT id FROM Bookings) AND date >= $2 AND date <= $3;
 	`
 
-	err := r.db.QueryRow(query, req.GymId, req.StartDate, req.EndDate).Scan(&res.Count)
+	err := r.db.QueryRow(query, req.GymId, req.StartDate, req.EndDate).Scan(&count)
 	if err != nil {
 		return nil, fmt.Errorf("error getting personal access count: %w", err)
 	}
-
+	if count.Valid {
+		res.Count = count.Int32
+	}
 	return res, nil
 }
 
 // GetTotalPersonalBookingRevenue retrieves the total revenue from personal bookings within a date range for a given gym.
 func (r *DashboardRepo) GetTotalPersonalBookingRevenue(req *pb.TotalRevenueReq) (*pb.TotalRevenueRes, error) {
 	res := &pb.TotalRevenueRes{}
-
+	totalRevenue := sql.NullInt32{}
 	query := `
 		WITH Subscriptions AS (
 			SELECT id
@@ -67,11 +69,13 @@ func (r *DashboardRepo) GetTotalPersonalBookingRevenue(req *pb.TotalRevenueReq) 
 		FROM Bookings;
 	`
 
-	err := r.db.QueryRow(query, req.GymId, req.StartDate, req.EndDate).Scan(&res.TotalRevenue)
+	err := r.db.QueryRow(query, req.GymId, req.StartDate, req.EndDate).Scan(&totalRevenue)
 	if err != nil {
 		return nil, fmt.Errorf("error getting total personal booking revenue: %w", err)
 	}
-
+	if totalRevenue.Valid {
+		res.TotalRevenue = totalRevenue.Int32
+	}
 	return res, nil
 }
 
