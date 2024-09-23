@@ -19,20 +19,20 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DashboardService_GetPersonalAccessCount_FullMethodName            = "/auth.DashboardService/GetPersonalAccessCount"
-	DashboardService_GetTotalPersonalBookingRevenue_FullMethodName    = "/auth.DashboardService/GetTotalPersonalBookingRevenue"
-	DashboardService_GetAccessCountBySubscriptionID_FullMethodName    = "/auth.DashboardService/GetAccessCountBySubscriptionID"
-	DashboardService_GetBookingRevenueBySubscriptionID_FullMethodName = "/auth.DashboardService/GetBookingRevenueBySubscriptionID"
+	DashboardService_GetDailyPersonalAccessCount_FullMethodName            = "/auth.DashboardService/GetDailyPersonalAccessCount"
+	DashboardService_GetDailyPersonalBookingRevenueByDay_FullMethodName    = "/auth.DashboardService/GetDailyPersonalBookingRevenueByDay"
+	DashboardService_GetDailyAccessCountBySubscriptionID_FullMethodName    = "/auth.DashboardService/GetDailyAccessCountBySubscriptionID"
+	DashboardService_GetDailyBookingRevenueBySubscriptionID_FullMethodName = "/auth.DashboardService/GetDailyBookingRevenueBySubscriptionID"
 )
 
 // DashboardServiceClient is the client API for DashboardService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DashboardServiceClient interface {
-	GetPersonalAccessCount(ctx context.Context, in *AccessCountReq, opts ...grpc.CallOption) (*AccessCountRes, error)
-	GetTotalPersonalBookingRevenue(ctx context.Context, in *TotalRevenueReq, opts ...grpc.CallOption) (*TotalRevenueRes, error)
-	GetAccessCountBySubscriptionID(ctx context.Context, in *SubscriptionCountReq, opts ...grpc.CallOption) (*SubscriptionCountRes, error)
-	GetBookingRevenueBySubscriptionID(ctx context.Context, in *TotalRevenueBySubscriptionReq, opts ...grpc.CallOption) (*TotalRevenueBySubscriptionRes, error)
+	GetDailyPersonalAccessCount(ctx context.Context, in *AccessCountReq, opts ...grpc.CallOption) (*AccessCountRes, error)
+	GetDailyPersonalBookingRevenueByDay(ctx context.Context, in *BookingRevenueReq, opts ...grpc.CallOption) (*BookingRevenueRes, error)
+	GetDailyAccessCountBySubscriptionID(ctx context.Context, in *SubscriptionCountReq, opts ...grpc.CallOption) (*SubscriptionCountRes, error)
+	GetDailyBookingRevenueBySubscriptionID(ctx context.Context, in *BookingRevenueBySubscriptionReq, opts ...grpc.CallOption) (*BookingRevenueBySubscriptionRes, error)
 }
 
 type dashboardServiceClient struct {
@@ -43,40 +43,40 @@ func NewDashboardServiceClient(cc grpc.ClientConnInterface) DashboardServiceClie
 	return &dashboardServiceClient{cc}
 }
 
-func (c *dashboardServiceClient) GetPersonalAccessCount(ctx context.Context, in *AccessCountReq, opts ...grpc.CallOption) (*AccessCountRes, error) {
+func (c *dashboardServiceClient) GetDailyPersonalAccessCount(ctx context.Context, in *AccessCountReq, opts ...grpc.CallOption) (*AccessCountRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AccessCountRes)
-	err := c.cc.Invoke(ctx, DashboardService_GetPersonalAccessCount_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, DashboardService_GetDailyPersonalAccessCount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *dashboardServiceClient) GetTotalPersonalBookingRevenue(ctx context.Context, in *TotalRevenueReq, opts ...grpc.CallOption) (*TotalRevenueRes, error) {
+func (c *dashboardServiceClient) GetDailyPersonalBookingRevenueByDay(ctx context.Context, in *BookingRevenueReq, opts ...grpc.CallOption) (*BookingRevenueRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TotalRevenueRes)
-	err := c.cc.Invoke(ctx, DashboardService_GetTotalPersonalBookingRevenue_FullMethodName, in, out, cOpts...)
+	out := new(BookingRevenueRes)
+	err := c.cc.Invoke(ctx, DashboardService_GetDailyPersonalBookingRevenueByDay_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *dashboardServiceClient) GetAccessCountBySubscriptionID(ctx context.Context, in *SubscriptionCountReq, opts ...grpc.CallOption) (*SubscriptionCountRes, error) {
+func (c *dashboardServiceClient) GetDailyAccessCountBySubscriptionID(ctx context.Context, in *SubscriptionCountReq, opts ...grpc.CallOption) (*SubscriptionCountRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SubscriptionCountRes)
-	err := c.cc.Invoke(ctx, DashboardService_GetAccessCountBySubscriptionID_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, DashboardService_GetDailyAccessCountBySubscriptionID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *dashboardServiceClient) GetBookingRevenueBySubscriptionID(ctx context.Context, in *TotalRevenueBySubscriptionReq, opts ...grpc.CallOption) (*TotalRevenueBySubscriptionRes, error) {
+func (c *dashboardServiceClient) GetDailyBookingRevenueBySubscriptionID(ctx context.Context, in *BookingRevenueBySubscriptionReq, opts ...grpc.CallOption) (*BookingRevenueBySubscriptionRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TotalRevenueBySubscriptionRes)
-	err := c.cc.Invoke(ctx, DashboardService_GetBookingRevenueBySubscriptionID_FullMethodName, in, out, cOpts...)
+	out := new(BookingRevenueBySubscriptionRes)
+	err := c.cc.Invoke(ctx, DashboardService_GetDailyBookingRevenueBySubscriptionID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,10 +87,10 @@ func (c *dashboardServiceClient) GetBookingRevenueBySubscriptionID(ctx context.C
 // All implementations must embed UnimplementedDashboardServiceServer
 // for forward compatibility.
 type DashboardServiceServer interface {
-	GetPersonalAccessCount(context.Context, *AccessCountReq) (*AccessCountRes, error)
-	GetTotalPersonalBookingRevenue(context.Context, *TotalRevenueReq) (*TotalRevenueRes, error)
-	GetAccessCountBySubscriptionID(context.Context, *SubscriptionCountReq) (*SubscriptionCountRes, error)
-	GetBookingRevenueBySubscriptionID(context.Context, *TotalRevenueBySubscriptionReq) (*TotalRevenueBySubscriptionRes, error)
+	GetDailyPersonalAccessCount(context.Context, *AccessCountReq) (*AccessCountRes, error)
+	GetDailyPersonalBookingRevenueByDay(context.Context, *BookingRevenueReq) (*BookingRevenueRes, error)
+	GetDailyAccessCountBySubscriptionID(context.Context, *SubscriptionCountReq) (*SubscriptionCountRes, error)
+	GetDailyBookingRevenueBySubscriptionID(context.Context, *BookingRevenueBySubscriptionReq) (*BookingRevenueBySubscriptionRes, error)
 	mustEmbedUnimplementedDashboardServiceServer()
 }
 
@@ -101,17 +101,17 @@ type DashboardServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedDashboardServiceServer struct{}
 
-func (UnimplementedDashboardServiceServer) GetPersonalAccessCount(context.Context, *AccessCountReq) (*AccessCountRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPersonalAccessCount not implemented")
+func (UnimplementedDashboardServiceServer) GetDailyPersonalAccessCount(context.Context, *AccessCountReq) (*AccessCountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDailyPersonalAccessCount not implemented")
 }
-func (UnimplementedDashboardServiceServer) GetTotalPersonalBookingRevenue(context.Context, *TotalRevenueReq) (*TotalRevenueRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTotalPersonalBookingRevenue not implemented")
+func (UnimplementedDashboardServiceServer) GetDailyPersonalBookingRevenueByDay(context.Context, *BookingRevenueReq) (*BookingRevenueRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDailyPersonalBookingRevenueByDay not implemented")
 }
-func (UnimplementedDashboardServiceServer) GetAccessCountBySubscriptionID(context.Context, *SubscriptionCountReq) (*SubscriptionCountRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAccessCountBySubscriptionID not implemented")
+func (UnimplementedDashboardServiceServer) GetDailyAccessCountBySubscriptionID(context.Context, *SubscriptionCountReq) (*SubscriptionCountRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDailyAccessCountBySubscriptionID not implemented")
 }
-func (UnimplementedDashboardServiceServer) GetBookingRevenueBySubscriptionID(context.Context, *TotalRevenueBySubscriptionReq) (*TotalRevenueBySubscriptionRes, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBookingRevenueBySubscriptionID not implemented")
+func (UnimplementedDashboardServiceServer) GetDailyBookingRevenueBySubscriptionID(context.Context, *BookingRevenueBySubscriptionReq) (*BookingRevenueBySubscriptionRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDailyBookingRevenueBySubscriptionID not implemented")
 }
 func (UnimplementedDashboardServiceServer) mustEmbedUnimplementedDashboardServiceServer() {}
 func (UnimplementedDashboardServiceServer) testEmbeddedByValue()                          {}
@@ -134,74 +134,74 @@ func RegisterDashboardServiceServer(s grpc.ServiceRegistrar, srv DashboardServic
 	s.RegisterService(&DashboardService_ServiceDesc, srv)
 }
 
-func _DashboardService_GetPersonalAccessCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DashboardService_GetDailyPersonalAccessCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AccessCountReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DashboardServiceServer).GetPersonalAccessCount(ctx, in)
+		return srv.(DashboardServiceServer).GetDailyPersonalAccessCount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DashboardService_GetPersonalAccessCount_FullMethodName,
+		FullMethod: DashboardService_GetDailyPersonalAccessCount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetPersonalAccessCount(ctx, req.(*AccessCountReq))
+		return srv.(DashboardServiceServer).GetDailyPersonalAccessCount(ctx, req.(*AccessCountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DashboardService_GetTotalPersonalBookingRevenue_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TotalRevenueReq)
+func _DashboardService_GetDailyPersonalBookingRevenueByDay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BookingRevenueReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DashboardServiceServer).GetTotalPersonalBookingRevenue(ctx, in)
+		return srv.(DashboardServiceServer).GetDailyPersonalBookingRevenueByDay(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DashboardService_GetTotalPersonalBookingRevenue_FullMethodName,
+		FullMethod: DashboardService_GetDailyPersonalBookingRevenueByDay_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetTotalPersonalBookingRevenue(ctx, req.(*TotalRevenueReq))
+		return srv.(DashboardServiceServer).GetDailyPersonalBookingRevenueByDay(ctx, req.(*BookingRevenueReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DashboardService_GetAccessCountBySubscriptionID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _DashboardService_GetDailyAccessCountBySubscriptionID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SubscriptionCountReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DashboardServiceServer).GetAccessCountBySubscriptionID(ctx, in)
+		return srv.(DashboardServiceServer).GetDailyAccessCountBySubscriptionID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DashboardService_GetAccessCountBySubscriptionID_FullMethodName,
+		FullMethod: DashboardService_GetDailyAccessCountBySubscriptionID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetAccessCountBySubscriptionID(ctx, req.(*SubscriptionCountReq))
+		return srv.(DashboardServiceServer).GetDailyAccessCountBySubscriptionID(ctx, req.(*SubscriptionCountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _DashboardService_GetBookingRevenueBySubscriptionID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TotalRevenueBySubscriptionReq)
+func _DashboardService_GetDailyBookingRevenueBySubscriptionID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BookingRevenueBySubscriptionReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DashboardServiceServer).GetBookingRevenueBySubscriptionID(ctx, in)
+		return srv.(DashboardServiceServer).GetDailyBookingRevenueBySubscriptionID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: DashboardService_GetBookingRevenueBySubscriptionID_FullMethodName,
+		FullMethod: DashboardService_GetDailyBookingRevenueBySubscriptionID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetBookingRevenueBySubscriptionID(ctx, req.(*TotalRevenueBySubscriptionReq))
+		return srv.(DashboardServiceServer).GetDailyBookingRevenueBySubscriptionID(ctx, req.(*BookingRevenueBySubscriptionReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -214,20 +214,20 @@ var DashboardService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*DashboardServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetPersonalAccessCount",
-			Handler:    _DashboardService_GetPersonalAccessCount_Handler,
+			MethodName: "GetDailyPersonalAccessCount",
+			Handler:    _DashboardService_GetDailyPersonalAccessCount_Handler,
 		},
 		{
-			MethodName: "GetTotalPersonalBookingRevenue",
-			Handler:    _DashboardService_GetTotalPersonalBookingRevenue_Handler,
+			MethodName: "GetDailyPersonalBookingRevenueByDay",
+			Handler:    _DashboardService_GetDailyPersonalBookingRevenueByDay_Handler,
 		},
 		{
-			MethodName: "GetAccessCountBySubscriptionID",
-			Handler:    _DashboardService_GetAccessCountBySubscriptionID_Handler,
+			MethodName: "GetDailyAccessCountBySubscriptionID",
+			Handler:    _DashboardService_GetDailyAccessCountBySubscriptionID_Handler,
 		},
 		{
-			MethodName: "GetBookingRevenueBySubscriptionID",
-			Handler:    _DashboardService_GetBookingRevenueBySubscriptionID_Handler,
+			MethodName: "GetDailyBookingRevenueBySubscriptionID",
+			Handler:    _DashboardService_GetDailyBookingRevenueBySubscriptionID_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

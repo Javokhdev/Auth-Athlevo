@@ -28,8 +28,8 @@ type UserI interface {
 }
 
 type DashboardI interface { 
-    GetPersonalAccessCount(*pb.AccessCountReq) (*pb.AccessCountRes, error)
-    GetTotalPersonalBookingRevenue(*pb.TotalRevenueReq) (*pb.TotalRevenueRes, error)
-    GetAccessCountBySubscriptionID(*pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error)
-    GetBookingRevenueBySubscriptionID(*pb.TotalRevenueBySubscriptionReq) (*pb.TotalRevenueBySubscriptionRes, error)
+    GetDailyPersonalAccessCount(*pb.AccessCountReq) (*pb.AccessCountRes, error)
+    GetDailyPersonalBookingRevenueByDay(*pb.BookingRevenueReq) (*pb.BookingRevenueRes, error)
+    GetDailyAccessCountBySubscriptionID(*pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error)
+    GetDailyBookingRevenueBySubscriptionID(*pb.BookingRevenueBySubscriptionReq) (*pb.BookingRevenueBySubscriptionRes, error)
 }

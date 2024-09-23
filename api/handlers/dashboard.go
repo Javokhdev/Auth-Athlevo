@@ -40,7 +40,7 @@ func (h *Handlers) GetPersonalAccessCount(c *gin.Context) {
 		EndDate:   endDate,
 	}
 
-	res, err := h.Dashboard.GetPersonalAccessCount(context.Background(), &req)
+	res, err := h.Dashboard.GetDailyPersonalAccessCount(context.Background(), &req)
 	if err != nil {
 		log.Printf("failed to get personal access count: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
@@ -60,7 +60,7 @@ func (h *Handlers) GetPersonalAccessCount(c *gin.Context) {
 // @Param gym_id query string true "gym ID"
 // @Param start_date query string true "Start Date"
 // @Param end_date query string true "End Date"
-// @Success 200 {object} auth.TotalRevenueRes
+// @Success 200 {object} auth.BookingRevenueRes
 // @Failure 400 {object} string "Invalid Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /dashboard/booking-revenue [get]
@@ -74,13 +74,13 @@ func (h *Handlers) GetTotalPersonalBookingRevenue(c *gin.Context) {
 		return
 	}
 
-	req := auth.TotalRevenueReq{
+	req := auth.BookingRevenueReq{
 		GymId:     gymId,
 		StartDate: startDate,
 		EndDate:   endDate,
 	}
 
-	res, err := h.Dashboard.GetTotalPersonalBookingRevenue(context.Background(), &req)
+	res, err := h.Dashboard.GetDailyPersonalBookingRevenueByDay(context.Background(), &req)
 	if err != nil {
 		log.Printf("failed to get booking revenue: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
@@ -120,7 +120,7 @@ func (h *Handlers) GetAccessCountBySubscriptionID(c *gin.Context) {
 		EndDate:        endDate,
 	}
 
-	res, err := h.Dashboard.GetAccessCountBySubscriptionID(context.Background(), &req)
+	res, err := h.Dashboard.GetDailyAccessCountBySubscriptionID(context.Background(), &req)
 	if err != nil {
 		log.Printf("failed to get access count by subscription: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
@@ -140,7 +140,7 @@ func (h *Handlers) GetAccessCountBySubscriptionID(c *gin.Context) {
 // @Param subscription_id query string true "Subscription ID"
 // @Param start_date query string true "Start Date"
 // @Param end_date query string true "End Date"
-// @Success 200 {object} auth.TotalRevenueBySubscriptionRes
+// @Success 200 {object} auth.BookingRevenueBySubscriptionRes
 // @Failure 400 {object} string "Invalid Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /dashboard/subscription/booking-revenue [get]
@@ -154,13 +154,13 @@ func (h *Handlers) GetBookingRevenueBySubscriptionID(c *gin.Context) {
 		return
 	}
 
-	req := auth.TotalRevenueBySubscriptionReq{
+	req := auth.BookingRevenueBySubscriptionReq{
 		SubscriptionID: subscriptionID,
 		StartDate:      startDate,
 		EndDate:        endDate,
 	}
 
-	res, err := h.Dashboard.GetBookingRevenueBySubscriptionID(context.Background(), &req)
+	res, err := h.Dashboard.GetDailyBookingRevenueBySubscriptionID(context.Background(), &req)
 	if err != nil {
 		log.Printf("failed to get booking revenue by subscription: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})

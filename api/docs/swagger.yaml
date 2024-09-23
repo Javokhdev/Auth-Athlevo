@@ -1,8 +1,45 @@
 definitions:
+  auth.AccessCount:
+    properties:
+      accessCount:
+        type: integer
+      accessDate:
+        type: string
+    type: object
   auth.AccessCountRes:
     properties:
-      count:
-        type: integer
+      accessCountList:
+        items:
+          $ref: '#/definitions/auth.AccessCount'
+        type: array
+    type: object
+  auth.BookingRevenue:
+    properties:
+      averageRevenue:
+        type: number
+      bookingDate:
+        type: string
+    type: object
+  auth.BookingRevenueBySubscription:
+    properties:
+      averageRevenue:
+        type: number
+      bookingDate:
+        type: string
+    type: object
+  auth.BookingRevenueBySubscriptionRes:
+    properties:
+      bookingRevenueBySubscriptionList:
+        items:
+          $ref: '#/definitions/auth.BookingRevenueBySubscription'
+        type: array
+    type: object
+  auth.BookingRevenueRes:
+    properties:
+      bookingRevenueList:
+        items:
+          $ref: '#/definitions/auth.BookingRevenue'
+        type: array
     type: object
   auth.ChangePasswordReqBody:
     properties:
@@ -89,20 +126,19 @@ definitions:
       theme:
         type: string
     type: object
+  auth.SubscriptionCount:
+    properties:
+      accessCount:
+        type: integer
+      accessDate:
+        type: string
+    type: object
   auth.SubscriptionCountRes:
     properties:
-      count:
-        type: integer
-    type: object
-  auth.TotalRevenueBySubscriptionRes:
-    properties:
-      totalRevenue:
-        type: integer
-    type: object
-  auth.TotalRevenueRes:
-    properties:
-      totalRevenue:
-        type: integer
+      subscriptionCountList:
+        items:
+          $ref: '#/definitions/auth.SubscriptionCount'
+        type: array
     type: object
   auth.UserRepeated:
     properties:
@@ -238,7 +274,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.TotalRevenueRes'
+            $ref: '#/definitions/auth.BookingRevenueRes'
         "400":
           description: Invalid Request
           schema:
@@ -322,7 +358,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.TotalRevenueBySubscriptionRes'
+            $ref: '#/definitions/auth.BookingRevenueBySubscriptionRes'
         "400":
           description: Invalid Request
           schema:

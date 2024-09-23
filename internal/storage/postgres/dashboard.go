@@ -4,6 +4,7 @@ import (
 	pb "auth-athlevo/genproto/auth"
 	"database/sql"
 	"fmt"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -20,10 +21,17 @@ func NewDashboardRepo(db *sql.DB) *DashboardRepo {
 	}
 }
 
-// GetPersonalAccessCount retrieves the count of access_personal records within a date range for a given gym.
-func (r *DashboardRepo) GetPersonalAccessCount(req *pb.AccessCountReq) (*pb.AccessCountRes, error) {
-	res := &pb.AccessCountRes{}
+var (
+	// Time layout for date strings
+	dateLayout = "2006-01-02"
+)
 
+// GetDailyPersonalAccessCount retrieves the count of access_personal records grouped by day within a date range for a given gym.
+func (r *DashboardRepo) GetDailyPersonalAccessCount(req *pb.AccessCountReq) (*pb.AccessCountRes, error) {
+	// Generate a list of all dates within the range
+	dates := generateDates(parseDateString(req.StartDate, dateLayout), parseDateString(req.EndDate, dateLayout))
+
+	// Construct the query
 	query := `
 		WITH Subscriptions AS (
 			SELECT id
@@ -31,27 +39,71 @@ func (r *DashboardRepo) GetPersonalAccessCount(req *pb.AccessCountReq) (*pb.Acce
 			WHERE gym_id = $1
 		),
 		Bookings AS (
-			SELECT id
+			SELECT id, user_id
 			FROM booking_personal
 			WHERE subscription_id IN (SELECT id FROM Subscriptions)
 		)
-		SELECT COUNT(*)
-		FROM access_personal
-		WHERE booking_id IN (SELECT id FROM Bookings) AND date >= $2 AND date <= $3;
+		SELECT 
+			DATE(ap.date) AS access_date,
+			COUNT(DISTINCT bp.user_id) AS user_count
+		FROM access_personal ap
+		JOIN booking_personal bp ON ap.booking_id = bp.id
+		WHERE bp.subscription_id IN (SELECT id FROM Subscriptions) AND ap.date >= $2 AND ap.date <= $3
+		GROUP BY access_date
+		ORDER BY access_date;
 	`
 
-	err := r.db.QueryRow(query, req.GymId, req.StartDate, req.EndDate).Scan(&res.Count)
+	rows, err := r.db.Query(query, req.GymId, req.StartDate, req.EndDate)
 	if err != nil {
-		return nil, fmt.Errorf("error getting personal access count: %w", err)
+		return nil, fmt.Errorf("error getting daily personal access count: %w", err)
+	}
+	defer rows.Close()
+
+	// Create a map to store the results
+	accessCounts := make(map[string]int)
+	for rows.Next() {
+		var (
+			accessDate time.Time
+			userCount  int
+		)
+
+		err := rows.Scan(&accessDate, &userCount)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning daily access count: %w", err)
+		}
+
+		accessCounts[accessDate.Format(time.RFC3339)] = userCount
 	}
 
-	return res, nil
+	// Fill in missing dates with 0 values
+	// dailyAccessCounts := make([]*DailyAccessCount, len(dates))
+	dailyAccessCounts := &pb.AccessCountRes{}
+	for _, date := range dates {
+		formattedDate := date.Format(time.RFC3339)
+		count, ok := accessCounts[formattedDate]
+		if !ok {
+			count = 0
+		}
+		// dailyAccessCounts[i] = &DailyAccessCount{
+		// 	AccessDate:  formattedDate,
+		// 	AccessCount: count,
+		// }
+
+		dailyAccessCounts.AccessCountList = append(dailyAccessCounts.AccessCountList, &pb.AccessCount{
+			AccessDate: formattedDate,
+			AccessCount: int32(count),
+		})
+	}
+
+	return dailyAccessCounts, nil
 }
 
-// GetTotalPersonalBookingRevenue retrieves the total revenue from personal bookings within a date range for a given gym.
-func (r *DashboardRepo) GetTotalPersonalBookingRevenue(req *pb.TotalRevenueReq) (*pb.TotalRevenueRes, error) {
-	res := &pb.TotalRevenueRes{}
+// GetDailyPersonalBookingRevenueByDay retrieves the average revenue from personal bookings grouped by day within a date range for a given gym.
+func (r *DashboardRepo) GetDailyPersonalBookingRevenueByDay(req *pb.BookingRevenueReq) (*pb.BookingRevenueRes, error) {
+	// Generate a list of all dates within the range
+	dates := generateDates(parseDateString(req.StartDate, dateLayout), parseDateString(req.EndDate, dateLayout))
 
+	// Construct the query
 	query := `
 		WITH Subscriptions AS (
 			SELECT id
@@ -59,55 +111,196 @@ func (r *DashboardRepo) GetTotalPersonalBookingRevenue(req *pb.TotalRevenueReq) 
 			WHERE gym_id = $1
 		),
 		Bookings AS (
-			SELECT id, payment
+			SELECT id, payment, start_date
 			FROM booking_personal
 			WHERE subscription_id IN (SELECT id FROM Subscriptions) AND start_date >= $2 AND start_date <= $3
 		)
-		SELECT SUM(payment)
-		FROM Bookings;
+		SELECT 
+			DATE(start_date) AS booking_date,
+			SUM(payment) AS total_revenue
+		FROM Bookings
+		GROUP BY booking_date
+		ORDER BY booking_date;
 	`
 
-	err := r.db.QueryRow(query, req.GetGymId, req.StartDate, req.EndDate).Scan(&res.TotalRevenue)
+	rows, err := r.db.Query(query, req.GymId, req.StartDate, req.EndDate)
 	if err != nil {
-		return nil, fmt.Errorf("error getting total personal booking revenue: %w", err)
+		return nil, fmt.Errorf("error getting average personal booking revenue by day: %w", err)
+	}
+	defer rows.Close()
+
+	// Create a map to store the results
+	bookingRevenues := make(map[string]float64)
+	for rows.Next() {
+		var (
+			bookingDate  time.Time
+			totalRevenue float64
+		)
+
+		err := rows.Scan(&bookingDate, &totalRevenue)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning daily revenue: %w", err)
+		}
+
+		bookingRevenues[bookingDate.Format(time.RFC3339)] = totalRevenue
 	}
 
-	return res, nil
+	// Fill in missing dates with 0 values
+	// dailyRevenues := make([]*DailyRevenue, len(dates))
+	dailyRevenues := &pb.BookingRevenueRes{}
+    for _, date := range dates {
+        formattedDate := date.Format(time.RFC3339)
+        revenue, ok := bookingRevenues[formattedDate]
+        if!ok {
+            revenue = 0
+        }
+        // dailyRevenues[i] = &DailyRevenue{
+        //     BookingDate:    formattedDate,
+        //     AverageRevenue: revenue,
+        // }
+
+        dailyRevenues.BookingRevenueList = append(dailyRevenues.BookingRevenueList, &pb.BookingRevenue{
+            BookingDate:    formattedDate,
+            AverageRevenue: float32(revenue),
+        })
+    }
+
+	return dailyRevenues, nil
 }
 
-// GetAccessCountBySubscriptionID retrieves the count of access_personal records for a given subscription ID within a date range.
-func (r *DashboardRepo) GetAccessCountBySubscriptionID(req *pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error) {
-	res := &pb.SubscriptionCountRes{}
+// GetDailyAccessCountBySubscriptionID retrieves the count of access_personal records for a given subscription ID grouped by day within a date range.
+func (r *DashboardRepo) GetDailyAccessCountBySubscriptionID(req *pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error) {
+	// Generate a list of all dates within the range
+	dates := generateDates(parseDateString(req.StartDate, dateLayout), parseDateString(req.EndDate, dateLayout))
 
+	// Construct the query
 	query := `
-		SELECT COUNT(*)
+		SELECT DATE(ap.date) AS access_date, COUNT(DISTINCT bp.user_id) AS user_count
 		FROM access_personal ap
 		JOIN booking_personal bp ON ap.booking_id = bp.id
-		WHERE bp.subscription_id = $1 AND ap.date >= $2 AND ap.date <= $3;
+		WHERE bp.subscription_id = $1 AND ap.date >= $2 AND ap.date <= $3
+		GROUP BY access_date
+		ORDER BY access_date;
 	`
 
-	err := r.db.QueryRow(query, req.SubscriptionID, req.StartDate, req.EndDate).Scan(&res.Count)
+	rows, err := r.db.Query(query, req.SubscriptionID, req.StartDate, req.EndDate)
 	if err != nil {
-		return nil, fmt.Errorf("error getting access count by subscription ID: %w", err)
+		return nil, fmt.Errorf("error getting daily access count by subscription ID: %w", err)
+	}
+	defer rows.Close()
+
+	// Create a map to store the results
+	accessCounts := make(map[string]int)
+	for rows.Next() {
+		var (
+			accessDate time.Time
+			userCount  int
+		)
+
+		err := rows.Scan(&accessDate, &userCount)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning daily access count: %w", err)
+		}
+
+		accessCounts[accessDate.Format(time.RFC3339)] = userCount
 	}
 
-	return res, nil
+	// Fill in missing dates with 0 values
+	// dailyAccessCounts := make([]*DailyAccessCount, len(dates))
+	dailyAccessCounts := &pb.SubscriptionCountRes{}
+    for _, date := range dates {
+        formattedDate := date.Format(time.RFC3339)
+        count, ok := accessCounts[formattedDate]
+        if!ok {
+            count = 0
+        }
+        // dailyAccessCounts[i] = &DailyAccessCount{
+        //     AccessDate:  formattedDate,
+        //     AccessCount: count,
+        // }
+
+        dailyAccessCounts.SubscriptionCountList = append(dailyAccessCounts.SubscriptionCountList, &pb.SubscriptionCount{
+            AccessDate: formattedDate,
+            AccessCount: int32(count),
+        })
+    }
+
+	return dailyAccessCounts, nil
 }
 
-// GetBookingRevenueBySubscriptionID retrieves the total revenue from personal bookings for a given subscription ID within a date range.
-func (r *DashboardRepo) GetBookingRevenueBySubscriptionID(req *pb.TotalRevenueBySubscriptionReq) (*pb.TotalRevenueBySubscriptionRes, error) {
-	res := &pb.TotalRevenueBySubscriptionRes{}
+// GetDailyBookingRevenueBySubscriptionID retrieves the total revenue from personal bookings for a given subscription ID grouped by day within a date range.
+func (r *DashboardRepo) GetDailyBookingRevenueBySubscriptionID(req *pb.BookingRevenueBySubscriptionReq) (*pb.BookingRevenueBySubscriptionRes, error) {
+	// Generate a list of all dates within the range
+	dates := generateDates(parseDateString(req.StartDate, dateLayout), parseDateString(req.EndDate, dateLayout))
 
+	// Construct the query
 	query := `
-		SELECT SUM(payment)
+		SELECT DATE(start_date) AS booking_date, SUM(payment) AS total_revenue
 		FROM booking_personal
-		WHERE subscription_id = $1 AND start_date >= $2 AND start_date <= $3;
+		WHERE subscription_id = $1 AND start_date >= $2 AND start_date <= $3
+		GROUP BY booking_date
+		ORDER BY booking_date;
 	`
 
-	err := r.db.QueryRow(query, req.SubscriptionID, req.StartDate, req.EndDate).Scan(&res.TotalRevenue)
+	rows, err := r.db.Query(query, req.SubscriptionID, req.StartDate, req.EndDate)
 	if err != nil {
-		return nil, fmt.Errorf("error getting booking revenue by subscription ID: %w", err)
+		return nil, fmt.Errorf("error getting daily booking revenue by subscription ID: %w", err)
+	}
+	defer rows.Close()
+
+	// Create a map to store the results
+	bookingRevenues := make(map[string]float64)
+	for rows.Next() {
+		var (
+			bookingDate  time.Time
+			totalRevenue float64
+		)
+
+		err := rows.Scan(&bookingDate, &totalRevenue)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning daily revenue: %w", err)
+		}
+
+		bookingRevenues[bookingDate.Format(time.RFC3339)] = totalRevenue
 	}
 
-	return res, nil
+	// Fill in missing dates with 0 values
+	// dailyRevenues := make([]*DailyRevenue, len(dates))
+	dailyRevenues := &pb.BookingRevenueBySubscriptionRes{}
+    for _, date := range dates {
+        formattedDate := date.Format(time.RFC3339)
+        revenue, ok := bookingRevenues[formattedDate]
+        if!ok {
+            revenue = 0
+        }
+        // dailyRevenues[i] = &DailyRevenue{
+        //     BookingDate:    formattedDate,
+        //     AverageRevenue: revenue,
+        // }
+
+        dailyRevenues.BookingRevenueBySubscriptionList = append(dailyRevenues.BookingRevenueBySubscriptionList, &pb.BookingRevenueBySubscription{
+            BookingDate:    formattedDate,
+            AverageRevenue: float32(revenue),
+        })
+    }
+
+	return dailyRevenues, nil
+}
+
+// generateDates generates a slice of dates between the start and end dates.
+func generateDates(startDate, endDate time.Time) []time.Time {
+	var dates []time.Time
+	for date := startDate; date.Before(endDate.AddDate(0, 0, 1)); date = date.AddDate(0, 0, 1) {
+		dates = append(dates, date)
+	}
+	return dates
+}
+
+func parseDateString(dateStr string, layout string) time.Time {
+	parsedTime, err := time.Parse(layout, dateStr)
+	if err != nil {
+		fmt.Errorf("error parsing date string: %v", err)
+		return time.Time{}
+	}
+	return parsedTime
 }
