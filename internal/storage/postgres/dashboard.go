@@ -67,7 +67,7 @@ func (r *DashboardRepo) GetTotalPersonalBookingRevenue(req *pb.TotalRevenueReq) 
 		FROM Bookings;
 	`
 
-	err := r.db.QueryRow(query, req.GetGymId, req.StartDate, req.EndDate).Scan(&res.TotalRevenue)
+	err := r.db.QueryRow(query, req.GymId, req.StartDate, req.EndDate).Scan(&res.TotalRevenue)
 	if err != nil {
 		return nil, fmt.Errorf("error getting total personal booking revenue: %w", err)
 	}
