@@ -5,10 +5,10 @@ option go_package = "genproto/auth";
 package auth;
 
 service DashboardService {
-    rpc GetPersonalAccessCount(AccessCountReq) returns (AccessCountRes);
-    rpc GetTotalPersonalBookingRevenue(TotalRevenueReq) returns (TotalRevenueRes);
-    rpc GetAccessCountBySubscriptionID(SubscriptionCountReq) returns (SubscriptionCountRes);
-    rpc GetBookingRevenueBySubscriptionID(TotalRevenueBySubscriptionReq) returns (TotalRevenueBySubscriptionRes);
+    rpc GetDailyPersonalAccessCount(AccessCountReq) returns (AccessCountRes);
+    rpc GetDailyPersonalBookingRevenueByDay(BookingRevenueReq) returns (BookingRevenueRes);
+    rpc GetDailyAccessCountBySubscriptionID(SubscriptionCountReq) returns (SubscriptionCountRes);
+    rpc GetDailyBookingRevenueBySubscriptionID(BookingRevenueBySubscriptionReq) returns (BookingRevenueBySubscriptionRes);
 }
 
 message AccessCountReq {
@@ -17,18 +17,28 @@ message AccessCountReq {
     string endDate = 3;
 }
 
-message AccessCountRes{
-    int32 count = 1;
+message AccessCount {
+    string accessDate = 1;
+    int32 accessCount = 2;
 }
 
-message TotalRevenueReq {
+message AccessCountRes {
+    repeated AccessCount accessCountList = 1;
+}
+
+message BookingRevenueReq {
     string gymId = 1;
     string startDate = 2;
     string endDate = 3;
 }
 
-message TotalRevenueRes{
-    int32 totalRevenue = 1;
+message BookingRevenue{
+    string bookingDate = 1;
+    float averageRevenue = 2;
+}
+
+message BookingRevenueRes {
+    repeated BookingRevenue bookingRevenueList = 1;
 }
 
 message SubscriptionCountReq {
@@ -37,16 +47,26 @@ message SubscriptionCountReq {
     string endDate = 3;
 }
 
-message SubscriptionCountRes{
-    int32 count = 1;
+message SubscriptionCount{
+    string accessDate = 1;
+    int32 accessCount = 2;
 }
 
-message TotalRevenueBySubscriptionReq {
+message SubscriptionCountRes {
+    repeated SubscriptionCount subscriptionCountList = 1;
+}
+
+message BookingRevenueBySubscriptionReq {
     string subscriptionID = 1;
     string startDate = 2;
     string endDate = 3;
 }
 
-message TotalRevenueBySubscriptionRes{
-    int32 totalRevenue = 1;
+message BookingRevenueBySubscription{
+    string bookingDate = 1;
+    float averageRevenue = 2;
+}
+
+message BookingRevenueBySubscriptionRes {
+    repeated BookingRevenueBySubscription bookingRevenueBySubscriptionList = 1;
 }

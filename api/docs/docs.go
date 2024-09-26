@@ -174,7 +174,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.TotalRevenueRes"
+                            "$ref": "#/definitions/auth.BookingRevenueRes"
                         }
                     },
                     "400": {
@@ -300,7 +300,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.TotalRevenueBySubscriptionRes"
+                            "$ref": "#/definitions/auth.BookingRevenueBySubscriptionRes"
                         }
                     },
                     "400": {
@@ -902,11 +902,69 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "auth.AccessCount": {
+            "type": "object",
+            "properties": {
+                "accessCount": {
+                    "type": "integer"
+                },
+                "accessDate": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.AccessCountRes": {
             "type": "object",
             "properties": {
-                "count": {
-                    "type": "integer"
+                "accessCountList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.AccessCount"
+                    }
+                }
+            }
+        },
+        "auth.BookingRevenue": {
+            "type": "object",
+            "properties": {
+                "averageRevenue": {
+                    "type": "number"
+                },
+                "bookingDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.BookingRevenueBySubscription": {
+            "type": "object",
+            "properties": {
+                "averageRevenue": {
+                    "type": "number"
+                },
+                "bookingDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.BookingRevenueBySubscriptionRes": {
+            "type": "object",
+            "properties": {
+                "bookingRevenueBySubscriptionList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.BookingRevenueBySubscription"
+                    }
+                }
+            }
+        },
+        "auth.BookingRevenueRes": {
+            "type": "object",
+            "properties": {
+                "bookingRevenueList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.BookingRevenue"
+                    }
                 }
             }
         },
@@ -1042,27 +1100,25 @@ const docTemplate = `{
                 }
             }
         },
+        "auth.SubscriptionCount": {
+            "type": "object",
+            "properties": {
+                "accessCount": {
+                    "type": "integer"
+                },
+                "accessDate": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.SubscriptionCountRes": {
             "type": "object",
             "properties": {
-                "count": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth.TotalRevenueBySubscriptionRes": {
-            "type": "object",
-            "properties": {
-                "totalRevenue": {
-                    "type": "integer"
-                }
-            }
-        },
-        "auth.TotalRevenueRes": {
-            "type": "object",
-            "properties": {
-                "totalRevenue": {
-                    "type": "integer"
+                "subscriptionCountList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.SubscriptionCount"
+                    }
                 }
             }
         },
