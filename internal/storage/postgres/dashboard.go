@@ -299,8 +299,110 @@ func generateDates(startDate, endDate time.Time) []time.Time {
 func parseDateString(dateStr string, layout string) time.Time {
 	parsedTime, err := time.Parse(layout, dateStr)
 	if err != nil {
-		fmt.Errorf("error parsing date string: %v", err)
-		return time.Time{}
+		fmt.Printf("error parsing date string: %v\n", err)  // Log the error instead
+		return time.Time{}  // Return zero value of time.Time
 	}
 	return parsedTime
 }
+
+
+func (r *DashboardRepo) TotalMen(req *pb.TotalMenReq) (*pb.TotalMenRes, error) {
+    // Query to count male users
+    query := `
+        SELECT COUNT(*)
+        FROM users
+        WHERE gender = 'male' AND gym_id = $1;
+    `
+
+    var count int32
+    err := r.db.QueryRow(query, req.GymId).Scan(&count)
+    if err != nil {
+        return nil, fmt.Errorf("error getting total men count: %w", err)
+    }
+
+    // Create the TotalMen object
+    totalMen := &pb.TotalMen{
+        TotalMen: count,
+        Gender:   "male", // Assuming the gender is fixed for this method
+    }
+
+    // Populate the TotalMenRes
+    totalMenRes := &pb.TotalMenRes{
+        TotalMenList: []*pb.TotalMen{totalMen}, // Assign to the repeated field
+    }
+
+    return totalMenRes, nil
+}
+
+
+func (r *DashboardRepo) TotalWomen(req *pb.TotalWomenReq) (*pb.TotalWomenRes, error) {
+    query := `
+        SELECT COUNT(*)
+        FROM users
+        WHERE gender = 'female' AND gym_id = $1;
+    `
+
+    var count int32
+    err := r.db.QueryRow(query, req.GymId).Scan(&count)
+    if err != nil {
+        return nil, fmt.Errorf("error getting total women count: %w", err)
+    }
+
+    // Correct usage based on original Protobuf
+    totalWomen := &pb.TotalWomen{
+        TotalWomen: count,
+        Gender:     "female",  // Assuming you're keeping track of gender
+    }
+
+    return &pb.TotalWomenRes{
+        TotalWomenList: []*pb.TotalWomen{totalWomen},  // Field name should be 'totalWomenList'
+    }, nil
+}
+
+
+func (r *DashboardRepo) TotalMembers(req *pb.TotalMembersReq) (*pb.TotalMembersRes, error) {
+    query := `
+        SELECT COUNT(*)
+        FROM users
+        WHERE gym_id = $1;
+    `
+
+    var count int32
+    err := r.db.QueryRow(query, req.GymId).Scan(&count)
+    if err != nil {
+        return nil, fmt.Errorf("error getting total members count: %w", err)
+    }
+
+    totalMembers := &pb.TotalMembers{
+        TotalMembers: count,
+    }
+
+    return &pb.TotalMembersRes{
+        TotalMembersList: []*pb.TotalMembers{totalMembers},  // Correct field name
+    }, nil
+}
+
+func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes, error) {
+    query := `
+        SELECT SUM(payment)
+        FROM transactions
+        WHERE gym_id = $1;
+    `
+
+    var totalAmount float32
+    err := r.db.QueryRow(query, req.GymId).Scan(&totalAmount)
+    if err != nil {
+        return nil, fmt.Errorf("error getting total amount: %w", err)
+    }
+
+    totalAmountRecord := &pb.TotalAmount{
+        TotalAmount: totalAmount,
+    }
+
+    return &pb.TotalAmountRes{
+        TotalAmountList: []*pb.TotalAmount{totalAmountRecord},  // Use correct field name
+    }, nil
+}
+
+
+

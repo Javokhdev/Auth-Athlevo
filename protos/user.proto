@@ -22,6 +22,7 @@ message UserRes{
     string date_of_birth = 6;
     string role = 7;
     string gym_id = 8;
+    string gender = 9;
 }
 
 
@@ -33,6 +34,7 @@ message EditProfileReqBpdy {
     string full_name = 5;
     string date_of_birth = 6;
     string gym_id = 7;
+    string gender = 8;
 }
 
 message ChangePasswordReq{
@@ -74,6 +76,7 @@ message GetByIdReq {
     string date_of_birth = 6;
     string role = 7;
     string gym_id = 8;
+    string gender = 9;
 }
 
 message GetSettingReq {

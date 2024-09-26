@@ -23,7 +23,7 @@ func NewUserRepo(db *sql.DB) *UserRepo {
 
 func (r *UserRepo) GetProfile(req *pb.GetByIdReq) (*pb.UserRepeated, error) {
 	var users []*pb.UserRes
-	query := `SELECT id, username, gym_id, phone_number, email, full_name, date_of_birth, role FROM users WHERE 1=1`
+	query := `SELECT id, username, gym_id, phone_number, email, full_name, date_of_birth, role, gender FROM users WHERE 1=1`
 
 	var args []interface{}
 	i := 1
@@ -59,6 +59,11 @@ func (r *UserRepo) GetProfile(req *pb.GetByIdReq) (*pb.UserRepeated, error) {
 		args = append(args, "%"+req.Email+"%")
 		i++
 	}
+	if req.Gender != "" {
+		query += fmt.Sprintf(" AND gender = $%d", i)
+		args = append(args, req.Gender)
+		i++
+	}
 	// Add other filters as needed (e.g., FaceId, PhoneNumber, DateOfBirth, Role)
 
 	rows, err := r.db.Query(query, args...)
@@ -79,6 +84,7 @@ func (r *UserRepo) GetProfile(req *pb.GetByIdReq) (*pb.UserRepeated, error) {
 			&res.FullName,
 			&date,
 			&res.Role,
+			&res.Gender,
 		)
 		if err != nil {
 			return nil, err
@@ -130,6 +136,11 @@ func (r *UserRepo) EditProfile(req *pb.UserRes) (*pb.UserRes, error) {
 	if req.DateOfBirth != "" && req.DateOfBirth != "string" {
 		arg = append(arg, req.DateOfBirth)
 		conditions = append(conditions, fmt.Sprintf("date_of_birth = $%d", len(arg)))
+	}
+
+	if req.Gender != "" && req.Gender != "string" {
+		arg = append(arg, req.Gender)
+		conditions = append(conditions, fmt.Sprintf("gender = $%d", len(arg)))
 	}
 
 	if len(conditions) > 0 {

@@ -50,3 +50,35 @@ func (s *DashboardService) GetDailyBookingRevenueBySubscriptionID(ctx context.Co
     }
     return res, nil
 }
+
+func (s *DashboardService) TotalMen(ctx context.Context, req *pb.TotalMenReq) (*pb.TotalMenRes, error) {
+	res, err := s.storage.DashboardS.TotalMen(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *DashboardService) TotalWomen(ctx context.Context, req *pb.TotalWomenReq) (*pb.TotalWomenRes, error) {
+	res, err := s.storage.DashboardS.TotalWomen(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *DashboardService) TotalMembers(ctx context.Context, req *pb.TotalMembersReq) (*pb.TotalMembersRes, error) {
+	res, err := s.storage.DashboardS.TotalMembers(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *DashboardService) TotalAmount(ctx context.Context, req *pb.TotalAmountReq) (*pb.TotalAmountRes, error) {
+	res, err := s.storage.DashboardS.TotalAmount(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
