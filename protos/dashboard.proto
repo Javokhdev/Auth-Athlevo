@@ -13,6 +13,8 @@ service DashboardService {
     rpc TotalWomen(TotalWomenReq) returns (TotalWomenRes);
     rpc TotalMembers(TotalMembersReq) returns (TotalMembersRes);
     rpc TotalAmount(TotalAmountReq) returns (TotalAmountRes);
+    rpc CompareCurrentAndPreviousMonthRevenue(Void) returns (RevenueReq);
+    rpc GetMonthlyRevenueStats(Void) returns (MonthlyRevenueRes);
 }
 
 message AccessCountReq {
@@ -126,4 +128,20 @@ message TotalAmount {
 
 message TotalAmountRes {
     repeated TotalAmount totalAmountList = 1;
+}
+
+message Void {}
+
+message RevenueReq {
+    float percentageChange = 1;
+}
+
+message MonthlyRevenue {
+    int32 year = 1;
+    int32 month = 2;
+    float amount = 3;
+}
+    
+message MonthlyRevenueRes {
+    repeated MonthlyRevenue monthlyRevenue = 1;
 }

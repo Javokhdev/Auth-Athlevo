@@ -385,8 +385,13 @@ func (r *DashboardRepo) TotalMembers(req *pb.TotalMembersReq) (*pb.TotalMembersR
 func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes, error) {
     query := `
         SELECT SUM(payment)
-        FROM transactions
-        WHERE gym_id = $1;
+        FROM (
+            SELECT payment FROM booking_personal WHERE gym_id = $1
+            UNION ALL
+            SELECT payment FROM booking_group WHERE gym_id = $1
+            UNION ALL
+            SELECT payment FROM booking_coach WHERE gym_id = $1
+        ) AS all_bookings;
     `
 
     var totalAmount float32
@@ -400,9 +405,95 @@ func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes,
     }
 
     return &pb.TotalAmountRes{
-        TotalAmountList: []*pb.TotalAmount{totalAmountRecord},  // Use correct field name
+        TotalAmountList: []*pb.TotalAmount{totalAmountRecord}, 
     }, nil
 }
 
 
+func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb.RevenueReq, error) {
+	
+	query := `
+		WITH current_month_revenue AS (
+			SELECT 
+				SUM(payment) AS total_revenue
+			FROM (
+				SELECT payment, created_at FROM booking_personal
+				UNION ALL
+				SELECT payment, created_at FROM booking_group
+				UNION ALL
+				SELECT payment, created_at FROM booking_coach
+			) AS all_bookings
+			WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
+			AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+		),
+		previous_month_revenue AS (
+			SELECT 
+				SUM(payment) AS total_revenue
+			FROM (
+				SELECT payment, created_at FROM booking_personal
+				UNION ALL
+				SELECT payment, created_at FROM booking_group
+				UNION ALL
+				SELECT payment, created_at FROM booking_coach
+			) AS all_bookings
+			WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) - 1
+			AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+		)
+		SELECT 
+			CASE 
+				WHEN previous_month_revenue.total_revenue = 0 THEN 0
+				ELSE (current_month_revenue.total_revenue - previous_month_revenue.total_revenue) / previous_month_revenue.total_revenue * 100
+			END AS revenue_change_percentage
+		FROM current_month_revenue, previous_month_revenue;
+	`
 
+	percentageChange := pb.RevenueReq{}
+
+	err := r.db.QueryRow(query).Scan(&percentageChange)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get revenue change percentage: %w", err)
+	}
+
+	return &percentageChange, nil
+}
+
+
+func (r *DashboardRepo) GetMonthlyRevenueStats(req *pb.Void) (*pb.MonthlyRevenueRes, error) {
+	query := `
+		SELECT 
+			EXTRACT(YEAR FROM created_at) AS year,
+			EXTRACT(MONTH FROM created_at) AS month,
+			SUM(payment) AS total_revenue
+		FROM (
+			SELECT payment, created_at FROM booking_personal
+			UNION ALL
+			SELECT payment, created_at FROM booking_group
+			UNION ALL
+			SELECT payment, created_at FROM booking_coach
+		) AS all_bookings
+		GROUP BY EXTRACT(YEAR FROM created_at), EXTRACT(MONTH FROM created_at)
+		ORDER BY year, month;
+	`
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get monthly revenue statistics: %w", err)
+	}
+	defer rows.Close()
+
+	revenues := &pb.MonthlyRevenueRes{}
+	for rows.Next() {
+		revenue := pb.MonthlyRevenue{}
+		err := rows.Scan(&revenue.Year, &revenue.Month, &revenue.Amount)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan monthly revenue: %w", err)
+		}
+		revenues.MonthlyRevenue = append(revenues.MonthlyRevenue, &revenue)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	return revenues, nil
+}

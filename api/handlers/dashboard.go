@@ -308,4 +308,48 @@ func (h *Handlers) TotalAmount(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
+// CompareCurrentAndPreviousMonthRevenue godoc
+// @Summary Compare current and previous
+// @Description Compare current and previous
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} auth.RevenueReq
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/compare-month-revenue [get]
+func (h *Handlers) CompareCurrentAndPreviousMonthRevenue(c *gin.Context) {
 
+	res, err := h.Dashboard.CompareCurrentAndPreviousMonthRevenue(context.Background(), &auth.Void{})
+	if err != nil {
+		log.Printf("failed to compare current and previous", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// GetMonthlyRevenueStats godoc
+// @Summary Get monthly revenue
+// @Description Get monthly revenue
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} auth.MonthlyRevenueRes
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/monthly-renue-stats [get]
+func (h *Handlers) GetMonthlyRevenueStats(c *gin.Context) {
+
+	res, err := h.Dashboard.GetMonthlyRevenueStats(context.Background(), &auth.Void{})
+	if err != nil {
+		log.Printf("failed to get monthly revenue", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
