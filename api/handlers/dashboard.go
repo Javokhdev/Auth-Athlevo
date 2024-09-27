@@ -169,3 +169,143 @@ func (h *Handlers) GetBookingRevenueBySubscriptionID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+// TotalMen godoc
+// @Summary Get the total number of men in a gym
+// @Description Get the total count of male members for a specified gym
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param gym_id query string true "Gym ID"
+// @Success 200 {object} auth.TotalMenRes
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/total-men [get]
+func (h *Handlers) TotalMen(c *gin.Context) {
+	gymID := c.Query("gym_id")
+
+	if gymID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
+		return
+	}
+
+	req := auth.TotalMenReq{
+		GymId: gymID,
+	}
+
+	res, err := h.Dashboard.TotalMen(context.Background(), &req)
+	if err != nil {
+		log.Printf("failed to get total men: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+// TotalWomen godoc
+// @Summary Get the total number of women in a gym
+// @Description Get the total count of female members for a specified gym
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param gym_id query string true "Gym ID"
+// @Success 200 {object} auth.TotalWomenRes
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/total-women [get]
+func (h *Handlers) TotalWomen(c *gin.Context) {
+	gymID := c.Query("gym_id")
+
+	if gymID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
+		return
+	}
+
+	req := auth.TotalWomenReq{
+		GymId: gymID,
+	}
+
+	res, err := h.Dashboard.TotalWomen(context.Background(), &req)
+	if err != nil {
+		log.Printf("failed to get total women: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+
+// TotalMembers godoc
+// @Summary Get the total number of members in a gym
+// @Description Get the total count of members for a specified gym
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param gym_id query string true "Gym ID"
+// @Success 200 {object} auth.TotalMembersRes
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/total-members [get]
+func (h *Handlers) TotalMembers(c *gin.Context) {
+	gymID := c.Query("gym_id")
+
+	if gymID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
+		return
+	}
+
+	req := auth.TotalMembersReq{
+		GymId: gymID,
+	}
+
+	res, err := h.Dashboard.TotalMembers(context.Background(), &req)
+	if err != nil {
+		log.Printf("failed to get total members: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+
+// TotalAmount godoc
+// @Summary Get the total revenue amount for a gym
+// @Description Get the total revenue amount for a specified gym
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param gym_id query string true "Gym ID"
+// @Success 200 {object} auth.TotalAmountRes
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/total-amount [get]
+func (h *Handlers) TotalAmount(c *gin.Context) {
+	gymID := c.Query("gym_id")
+
+	if gymID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
+		return
+	}
+
+	req := auth.TotalAmountReq{
+		GymId: gymID,
+	}
+
+	res, err := h.Dashboard.TotalAmount(context.Background(), &req)
+	if err != nil {
+		log.Printf("failed to get total amount: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
+
+

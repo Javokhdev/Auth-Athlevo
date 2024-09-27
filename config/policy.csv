@@ -21,3 +21,7 @@ p, admin, /dashboard/access-count, GET
 p, admin, /dashboard/booking-revenue, GET
 p, admin, /dashboard/subscription/access-count, GET
 p, admin, /dashboard/subscription/booking-revenue, GET
+p, admin, /dashboard/total-men, GET
+p, admin, /dashboard/total-women, GET
+p, admin, /dashboard/total-amount, GET
+p, admin, /dashboard/total-members, GET

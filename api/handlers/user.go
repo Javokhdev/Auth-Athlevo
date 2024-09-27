@@ -25,6 +25,7 @@ import (
 // @Param email query string false "Filter by email"
 // @Param gym_id query string false "Filter by gym ID"
 // @Param phone_number query string false "Filter by phone number"
+// @Param gender query string false "Filter by gender"
 // @Security BearerAuth
 // @Success 200 {object} auth.UserRepeated
 // @Failure 400 {object} string "Bad Request"
@@ -38,6 +39,8 @@ func (h *Handlers) GetProfile(c *gin.Context) {
 		Email:       c.Query("email"),
 		GymId:       c.Query("gym_id"),
 		PhoneNumber: c.Query("phone_number"),
+		Gender:      c.Query("gender"),
+
 	}
 
 	profiles, err := h.User.GetProfile(c, req)
@@ -78,6 +81,7 @@ func (h *Handlers) EditProfile(c *gin.Context) {
 		PhoneNumber: req.PhoneNumber,
 		DateOfBirth: req.DateOfBirth,
 		GymId:       req.GymId,
+		Gender:      req.Gender,
 	})
 	if err != nil {
 		log.Println("Error editing profile:", err)

@@ -9,6 +9,10 @@ service DashboardService {
     rpc GetDailyPersonalBookingRevenueByDay(BookingRevenueReq) returns (BookingRevenueRes);
     rpc GetDailyAccessCountBySubscriptionID(SubscriptionCountReq) returns (SubscriptionCountRes);
     rpc GetDailyBookingRevenueBySubscriptionID(BookingRevenueBySubscriptionReq) returns (BookingRevenueBySubscriptionRes);
+    rpc TotalMen(TotalMenReq) returns (TotalMenRes);
+    rpc TotalWomen(TotalWomenReq) returns (TotalWomenRes);
+    rpc TotalMembers(TotalMembersReq) returns (TotalMembersRes);
+    rpc TotalAmount(TotalAmountReq) returns (TotalAmountRes);
 }
 
 message AccessCountReq {
@@ -69,4 +73,57 @@ message BookingRevenueBySubscription{
 
 message BookingRevenueBySubscriptionRes {
     repeated BookingRevenueBySubscription bookingRevenueBySubscriptionList = 1;
+}
+
+message TotalMenReq {
+    string gymId = 1;
+}
+
+message TotalMen {
+    int32 totalMen = 1;
+    string gender = 2;  // This is fine if you want to keep track of gender types
+}
+
+message TotalMenRes {
+    repeated TotalMen totalMenList = 1;
+}
+
+
+message TotalWomenReq {
+    string gymId = 1;
+}
+
+message TotalWomen {
+    int32 totalWomen = 1;
+    string gender = 2;
+}
+
+message TotalWomenRes {
+    repeated TotalWomen totalWomenList = 1;
+}
+
+
+message TotalMembersReq {
+    string gymId = 1;
+}
+
+message TotalMembers {
+    int32 totalMembers = 1;
+}
+
+message TotalMembersRes {
+    repeated TotalMembers totalMembersList = 1;
+}
+
+
+message TotalAmountReq {
+    string gymId = 1;
+}
+
+message TotalAmount {
+    float totalAmount = 1;
+}
+
+message TotalAmountRes {
+    repeated TotalAmount totalAmountList = 1;
 }

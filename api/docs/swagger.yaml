@@ -56,6 +56,8 @@ definitions:
         type: string
       full_name:
         type: string
+      gender:
+        type: string
       gym_id:
         type: string
       id:
@@ -91,6 +93,8 @@ definitions:
       email:
         type: string
       full_name:
+        type: string
+      gender:
         type: string
       gym_id:
         type: string
@@ -140,6 +144,59 @@ definitions:
           $ref: '#/definitions/auth.SubscriptionCount'
         type: array
     type: object
+  auth.TotalAmount:
+    properties:
+      totalAmount:
+        type: number
+    type: object
+  auth.TotalAmountRes:
+    properties:
+      totalAmountList:
+        items:
+          $ref: '#/definitions/auth.TotalAmount'
+        type: array
+    type: object
+  auth.TotalMembers:
+    properties:
+      totalMembers:
+        type: integer
+    type: object
+  auth.TotalMembersRes:
+    properties:
+      totalMembersList:
+        items:
+          $ref: '#/definitions/auth.TotalMembers'
+        type: array
+    type: object
+  auth.TotalMen:
+    properties:
+      gender:
+        description: This is fine if you want to keep track of gender types
+        type: string
+      totalMen:
+        type: integer
+    type: object
+  auth.TotalMenRes:
+    properties:
+      totalMenList:
+        items:
+          $ref: '#/definitions/auth.TotalMen'
+        type: array
+    type: object
+  auth.TotalWomen:
+    properties:
+      gender:
+        type: string
+      totalWomen:
+        type: integer
+    type: object
+  auth.TotalWomenRes:
+    properties:
+      totalWomenList:
+        items:
+          $ref: '#/definitions/auth.TotalWomen'
+        type: array
+    type: object
   auth.UserRepeated:
     properties:
       users:
@@ -154,6 +211,8 @@ definitions:
       email:
         type: string
       full_name:
+        type: string
+      gender:
         type: string
       gym_id:
         type: string
@@ -372,6 +431,130 @@ paths:
       summary: Get booking revenue by subscription ID
       tags:
       - dashboard
+  /dashboard/total-amount:
+    get:
+      consumes:
+      - application/json
+      description: Get the total revenue amount for a specified gym
+      parameters:
+      - description: Gym ID
+        in: query
+        name: gym_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TotalAmountRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get the total revenue amount for a gym
+      tags:
+      - dashboard
+  /dashboard/total-members:
+    get:
+      consumes:
+      - application/json
+      description: Get the total count of members for a specified gym
+      parameters:
+      - description: Gym ID
+        in: query
+        name: gym_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TotalMembersRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get the total number of members in a gym
+      tags:
+      - dashboard
+  /dashboard/total-men:
+    get:
+      consumes:
+      - application/json
+      description: Get the total count of male members for a specified gym
+      parameters:
+      - description: Gym ID
+        in: query
+        name: gym_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TotalMenRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get the total number of men in a gym
+      tags:
+      - dashboard
+  /dashboard/total-women:
+    get:
+      consumes:
+      - application/json
+      description: Get the total count of female members for a specified gym
+      parameters:
+      - description: Gym ID
+        in: query
+        name: gym_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TotalWomenRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get the total number of women in a gym
+      tags:
+      - dashboard
   /forgot-password:
     post:
       consumes:
@@ -581,6 +764,10 @@ paths:
       - description: Filter by phone number
         in: query
         name: phone_number
+        type: string
+      - description: Filter by gender
+        in: query
+        name: gender
         type: string
       produces:
       - application/json

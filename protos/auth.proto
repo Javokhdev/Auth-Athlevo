@@ -22,6 +22,7 @@ message RegisterReq {
     string date_of_birth = 5;
     string phone_number = 6;
     string gym_id = 7;
+    string gender = 8;
 }
 
 message RegisterRes {

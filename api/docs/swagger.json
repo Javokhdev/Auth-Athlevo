@@ -310,6 +310,202 @@
                 }
             }
         },
+        "/dashboard/total-amount": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the total revenue amount for a specified gym",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the total revenue amount for a gym",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalAmountRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/total-members": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the total count of members for a specified gym",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the total number of members in a gym",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalMembersRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/total-men": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the total count of male members for a specified gym",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the total number of men in a gym",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalMenRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/total-women": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the total count of female members for a specified gym",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the total number of women in a gym",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TotalWomenRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/forgot-password": {
             "post": {
                 "description": "Request to reset user's password",
@@ -640,6 +836,12 @@
                         "type": "string",
                         "description": "Filter by phone number",
                         "name": "phone_number",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by gender",
+                        "name": "gender",
                         "in": "query"
                     }
                 ],
@@ -983,6 +1185,9 @@
                 "full_name": {
                     "type": "string"
                 },
+                "gender": {
+                    "type": "string"
+                },
                 "gym_id": {
                     "type": "string"
                 },
@@ -1037,6 +1242,9 @@
                     "type": "string"
                 },
                 "full_name": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "gym_id": {
@@ -1114,6 +1322,89 @@
                 }
             }
         },
+        "auth.TotalAmount": {
+            "type": "object",
+            "properties": {
+                "totalAmount": {
+                    "type": "number"
+                }
+            }
+        },
+        "auth.TotalAmountRes": {
+            "type": "object",
+            "properties": {
+                "totalAmountList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.TotalAmount"
+                    }
+                }
+            }
+        },
+        "auth.TotalMembers": {
+            "type": "object",
+            "properties": {
+                "totalMembers": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.TotalMembersRes": {
+            "type": "object",
+            "properties": {
+                "totalMembersList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.TotalMembers"
+                    }
+                }
+            }
+        },
+        "auth.TotalMen": {
+            "type": "object",
+            "properties": {
+                "gender": {
+                    "description": "This is fine if you want to keep track of gender types",
+                    "type": "string"
+                },
+                "totalMen": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.TotalMenRes": {
+            "type": "object",
+            "properties": {
+                "totalMenList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.TotalMen"
+                    }
+                }
+            }
+        },
+        "auth.TotalWomen": {
+            "type": "object",
+            "properties": {
+                "gender": {
+                    "type": "string"
+                },
+                "totalWomen": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.TotalWomenRes": {
+            "type": "object",
+            "properties": {
+                "totalWomenList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.TotalWomen"
+                    }
+                }
+            }
+        },
         "auth.UserRepeated": {
             "type": "object",
             "properties": {
@@ -1135,6 +1426,9 @@
                     "type": "string"
                 },
                 "full_name": {
+                    "type": "string"
+                },
+                "gender": {
                     "type": "string"
                 },
                 "gym_id": {

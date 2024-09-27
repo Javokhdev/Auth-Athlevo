@@ -1,4 +1,5 @@
 CREATE TYPE role_type AS ENUM ('admin', 'user', 'owner','coach');
+CREATE TYPE gender_type AS ENUM ('male', 'female');
 
 -- USER TABLE
 CREATE TABLE IF NOT EXISTS users (
@@ -11,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100),
     date_of_birth DATE,
     role role_type NOT NULL DEFAULT 'user',
+    gender gender_type NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     deleted_at BIGINT DEFAULT 0
