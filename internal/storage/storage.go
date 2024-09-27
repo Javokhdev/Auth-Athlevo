@@ -36,4 +36,6 @@ type DashboardI interface {
     TotalWomen(*pb.TotalWomenReq) (*pb.TotalWomenRes, error)
     TotalMembers(*pb.TotalMembersReq) (*pb.TotalMembersRes, error)
     TotalAmount(*pb.TotalAmountReq) (*pb.TotalAmountRes, error)
+    CompareCurrentAndPreviousMonthRevenue(*pb.Void) (*pb.RevenueReq, error)
+    GetMonthlyRevenueStats(*pb.Void) (*pb.MonthlyRevenueRes, error)
 }

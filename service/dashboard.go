@@ -82,3 +82,19 @@ func (s *DashboardService) TotalAmount(ctx context.Context, req *pb.TotalAmountR
 	}
 	return res, nil
 }
+
+func (s *DashboardService) CompareCurrentAndPreviousMonthRevenue(ctx context.Context, req *pb.Void) (*pb.RevenueReq, error) {
+	res, err := s.storage.DashboardS.CompareCurrentAndPreviousMonthRevenue(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (s *DashboardService) GetMonthlyRevenueStats(ctx context.Context, req *pb.Void) (*pb.MonthlyRevenueRes, error) {
+	res, err := s.storage.DashboardS.GetMonthlyRevenueStats(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
