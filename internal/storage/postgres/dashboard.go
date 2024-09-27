@@ -386,11 +386,24 @@ func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes,
     query := `
         SELECT SUM(payment)
         FROM (
-            SELECT payment FROM booking_personal WHERE gym_id = $1
+            SELECT bp.payment 
+            FROM booking_personal bp
+            JOIN subscription_personal sp ON bp.subscription_id = sp.id
+            WHERE sp.gym_id = $1
+
             UNION ALL
-            SELECT payment FROM booking_group WHERE gym_id = $1
+
+            SELECT bg.payment
+            FROM booking_group bg
+            JOIN subscription_group sg ON bg.subscription_id = sg.id
+            WHERE sg.gym_id = $1
+
             UNION ALL
-            SELECT payment FROM booking_coach WHERE gym_id = $1
+
+            SELECT bc.payment
+            FROM booking_coach bc
+            JOIN subscription_coach sc ON bc.subscription_id = sc.id
+            WHERE sc.gym_id = $1
         ) AS all_bookings;
     `
 
@@ -405,9 +418,10 @@ func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes,
     }
 
     return &pb.TotalAmountRes{
-        TotalAmountList: []*pb.TotalAmount{totalAmountRecord}, 
+        TotalAmountList: []*pb.TotalAmount{totalAmountRecord},
     }, nil
 }
+
 
 
 func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb.RevenueReq, error) {
