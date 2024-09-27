@@ -192,6 +192,86 @@ const docTemplate = `{
                 }
             }
         },
+        "/dashboard/compare-month-revenue": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Compare current and previous",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Compare current and previous",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.RevenueReq"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/monthly-renue-stats": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get monthly revenue",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get monthly revenue",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.MonthlyRevenueRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/dashboard/subscription/access-count": {
             "get": {
                 "security": [
@@ -1240,6 +1320,31 @@ const docTemplate = `{
                 }
             }
         },
+        "auth.MonthlyRevenue": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "month": {
+                    "type": "integer"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.MonthlyRevenueRes": {
+            "type": "object",
+            "properties": {
+                "monthlyRevenue": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.MonthlyRevenue"
+                    }
+                }
+            }
+        },
         "auth.RegisterReq": {
             "type": "object",
             "properties": {
@@ -1277,6 +1382,14 @@ const docTemplate = `{
                 },
                 "new_password": {
                     "type": "string"
+                }
+            }
+        },
+        "auth.RevenueReq": {
+            "type": "object",
+            "properties": {
+                "percentageChange": {
+                    "type": "number"
                 }
             }
         },

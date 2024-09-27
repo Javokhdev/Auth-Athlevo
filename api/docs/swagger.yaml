@@ -86,6 +86,22 @@ definitions:
       token:
         type: string
     type: object
+  auth.MonthlyRevenue:
+    properties:
+      amount:
+        type: number
+      month:
+        type: integer
+      year:
+        type: integer
+    type: object
+  auth.MonthlyRevenueRes:
+    properties:
+      monthlyRevenue:
+        items:
+          $ref: '#/definitions/auth.MonthlyRevenue'
+        type: array
+    type: object
   auth.RegisterReq:
     properties:
       date_of_birth:
@@ -111,6 +127,11 @@ definitions:
         type: string
       new_password:
         type: string
+    type: object
+  auth.RevenueReq:
+    properties:
+      percentageChange:
+        type: number
     type: object
   auth.Role:
     properties:
@@ -345,6 +366,56 @@ paths:
       security:
       - BearerAuth: []
       summary: Get total booking revenue for a gym
+      tags:
+      - dashboard
+  /dashboard/compare-month-revenue:
+    get:
+      consumes:
+      - application/json
+      description: Compare current and previous
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RevenueReq'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Compare current and previous
+      tags:
+      - dashboard
+  /dashboard/monthly-renue-stats:
+    get:
+      consumes:
+      - application/json
+      description: Get monthly revenue
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.MonthlyRevenueRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get monthly revenue
       tags:
       - dashboard
   /dashboard/subscription/access-count:
