@@ -425,7 +425,6 @@ func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes,
 
 
 func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb.RevenueReq, error) {
-	
 	query := `
 		WITH current_month_revenue AS (
 			SELECT 
@@ -455,21 +454,23 @@ func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb
 		)
 		SELECT 
 			CASE 
-				WHEN previous_month_revenue.total_revenue = 0 THEN 0
-				ELSE (current_month_revenue.total_revenue - previous_month_revenue.total_revenue) / previous_month_revenue.total_revenue * 100
+				WHEN COALESCE(previous_month_revenue.total_revenue, 0) = 0 THEN 0
+				ELSE (COALESCE(current_month_revenue.total_revenue, 0) - previous_month_revenue.total_revenue) / previous_month_revenue.total_revenue * 100
 			END AS revenue_change_percentage
 		FROM current_month_revenue, previous_month_revenue;
 	`
 
-	percentageChange := pb.RevenueReq{}
-
+	var percentageChange float64
 	err := r.db.QueryRow(query).Scan(&percentageChange)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get revenue change percentage: %w", err)
 	}
 
-	return &percentageChange, nil
+	return &pb.RevenueReq{
+		PercentageChange: float32(percentageChange),
+	}, nil
 }
+
 
 
 func (r *DashboardRepo) GetMonthlyRevenueStats(req *pb.Void) (*pb.MonthlyRevenueRes, error) {
