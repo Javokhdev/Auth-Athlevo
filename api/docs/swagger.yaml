@@ -1,46 +1,4 @@
 definitions:
-  auth.AccessCount:
-    properties:
-      accessCount:
-        type: integer
-      accessDate:
-        type: string
-    type: object
-  auth.AccessCountRes:
-    properties:
-      accessCountList:
-        items:
-          $ref: '#/definitions/auth.AccessCount'
-        type: array
-    type: object
-  auth.BookingRevenue:
-    properties:
-      averageRevenue:
-        type: number
-      bookingDate:
-        type: string
-    type: object
-  auth.BookingRevenueBySubscription:
-    properties:
-      averageRevenue:
-        type: number
-      bookingDate:
-        type: string
-    type: object
-  auth.BookingRevenueBySubscriptionRes:
-    properties:
-      bookingRevenueBySubscriptionList:
-        items:
-          $ref: '#/definitions/auth.BookingRevenueBySubscription'
-        type: array
-    type: object
-  auth.BookingRevenueRes:
-    properties:
-      bookingRevenueList:
-        items:
-          $ref: '#/definitions/auth.BookingRevenue'
-        type: array
-    type: object
   auth.ChangePasswordReqBody:
     properties:
       current_password:
@@ -158,18 +116,32 @@ definitions:
       theme:
         type: string
     type: object
-  auth.SubscriptionCount:
+  auth.TariffAmount:
     properties:
-      accessCount:
-        type: integer
-      accessDate:
+      amount:
+        type: number
+      tariffName:
         type: string
     type: object
-  auth.SubscriptionCountRes:
+  auth.TariffRevenueRes:
     properties:
-      subscriptionCountList:
+      tariffAmounts:
         items:
-          $ref: '#/definitions/auth.SubscriptionCount'
+          $ref: '#/definitions/auth.TariffAmount'
+        type: array
+    type: object
+  auth.TariffUsers:
+    properties:
+      numOfUsers:
+        type: integer
+      tariffName:
+        type: string
+    type: object
+  auth.TariffUsersRes:
+    properties:
+      tariffUsers:
+        items:
+          $ref: '#/definitions/auth.TariffUsers'
         type: array
     type: object
   auth.TotalAmount:
@@ -291,90 +263,6 @@ paths:
       summary: Change user role
       tags:
       - auth
-  /dashboard/access-count:
-    get:
-      consumes:
-      - application/json
-      description: Get the number of times a gym accessed the gym within the specified
-        date range
-      parameters:
-      - description: gym ID
-        in: query
-        name: gym_id
-        required: true
-        type: string
-      - description: Start Date
-        in: query
-        name: start_date
-        required: true
-        type: string
-      - description: End Date
-        in: query
-        name: end_date
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/auth.AccessCountRes'
-        "400":
-          description: Invalid Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get the access count of a gym
-      tags:
-      - dashboard
-  /dashboard/booking-revenue:
-    get:
-      consumes:
-      - application/json
-      description: Get the total booking revenue within the specified date range for
-        a gym
-      parameters:
-      - description: gym ID
-        in: query
-        name: gym_id
-        required: true
-        type: string
-      - description: Start Date
-        in: query
-        name: start_date
-        required: true
-        type: string
-      - description: End Date
-        in: query
-        name: end_date
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/auth.BookingRevenueRes'
-        "400":
-          description: Invalid Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get total booking revenue for a gym
-      tags:
-      - dashboard
   /dashboard/compare-month-revenue:
     get:
       consumes:
@@ -468,26 +356,15 @@ paths:
       summary: Get monthly revenue
       tags:
       - dashboard
-  /dashboard/subscription/access-count:
+  /dashboard/revenue-by-tariff:
     get:
       consumes:
       - application/json
-      description: Get the number of times a user accessed the gym based on subscription
-        ID within a date range
+      description: Get the revenue by Tariff
       parameters:
-      - description: Subscription ID
+      - description: Gym ID
         in: query
-        name: subscription_id
-        required: true
-        type: string
-      - description: Start Date
-        in: query
-        name: start_date
-        required: true
-        type: string
-      - description: End Date
-        in: query
-        name: end_date
+        name: gym_id
         required: true
         type: string
       produces:
@@ -496,7 +373,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/auth.SubscriptionCountRes'
+            $ref: '#/definitions/auth.TariffRevenueRes'
         "400":
           description: Invalid Request
           schema:
@@ -507,49 +384,7 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get the access count by subscription ID
-      tags:
-      - dashboard
-  /dashboard/subscription/booking-revenue:
-    get:
-      consumes:
-      - application/json
-      description: Get total booking revenue based on subscription ID within a date
-        range
-      parameters:
-      - description: Subscription ID
-        in: query
-        name: subscription_id
-        required: true
-        type: string
-      - description: Start Date
-        in: query
-        name: start_date
-        required: true
-        type: string
-      - description: End Date
-        in: query
-        name: end_date
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/auth.BookingRevenueBySubscriptionRes'
-        "400":
-          description: Invalid Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get booking revenue by subscription ID
+      summary: Get the revenue by Tariff
       tags:
       - dashboard
   /dashboard/total-amount:
@@ -674,6 +509,37 @@ paths:
       security:
       - BearerAuth: []
       summary: Get the total number of women in a gym
+      tags:
+      - dashboard
+  /dashboard/users-by-subscription:
+    get:
+      consumes:
+      - application/json
+      description: Get users by tariff
+      parameters:
+      - description: Gym ID
+        in: query
+        name: gym_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.TariffUsersRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get users by tariff
       tags:
       - dashboard
   /forgot-password:

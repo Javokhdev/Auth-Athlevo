@@ -18,38 +18,38 @@ func NewDashboardService(storage *st.Storage) *DashboardService {
 	}
 }
 
-func (s *DashboardService) GetDailyPersonalAccessCount(ctx context.Context, req *pb.AccessCountReq) (*pb.AccessCountRes, error) {
-	res, err := s.storage.DashboardS.GetDailyPersonalAccessCount(req)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
+// func (s *DashboardService) GetDailyPersonalAccessCount(ctx context.Context, req *pb.AccessCountReq) (*pb.AccessCountRes, error) {
+// 	res, err := s.storage.DashboardS.GetDailyPersonalAccessCount(req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return res, nil
+// }
 
 
-func (s *DashboardService) GetDailyPersonalBookingRevenueByDay(ctx context.Context, req *pb.BookingRevenueReq) (*pb.BookingRevenueRes, error) {
-	res, err := s.storage.DashboardS.GetDailyPersonalBookingRevenueByDay(req)
-    if err != nil {
-        return nil, err
-    }
-    return res, nil
-}
+// func (s *DashboardService) GetDailyPersonalBookingRevenueByDay(ctx context.Context, req *pb.BookingRevenueReq) (*pb.BookingRevenueRes, error) {
+// 	res, err := s.storage.DashboardS.GetDailyPersonalBookingRevenueByDay(req)
+//     if err != nil {
+//         return nil, err
+//     }
+//     return res, nil
+// }
 
-func (s *DashboardService) GetDailyAccessCountBySubscriptionID(ctx context.Context, req *pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error) {
-	res, err := s.storage.DashboardS.GetDailyAccessCountBySubscriptionID(req)
-    if err != nil {
-        return nil, err
-    }
-    return res, nil
-}
+// func (s *DashboardService) GetDailyAccessCountBySubscriptionID(ctx context.Context, req *pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error) {
+// 	res, err := s.storage.DashboardS.GetDailyAccessCountBySubscriptionID(req)
+//     if err != nil {
+//         return nil, err
+//     }
+//     return res, nil
+// }
 
-func (s *DashboardService) GetDailyBookingRevenueBySubscriptionID(ctx context.Context, req *pb.BookingRevenueBySubscriptionReq) (*pb.BookingRevenueBySubscriptionRes, error) {
-	res, err := s.storage.DashboardS.GetDailyBookingRevenueBySubscriptionID(req)
-    if err != nil {
-        return nil, err
-    }
-    return res, nil
-}
+// func (s *DashboardService) GetDailyBookingRevenueBySubscriptionID(ctx context.Context, req *pb.BookingRevenueBySubscriptionReq) (*pb.BookingRevenueBySubscriptionRes, error) {
+// 	res, err := s.storage.DashboardS.GetDailyBookingRevenueBySubscriptionID(req)
+//     if err != nil {
+//         return nil, err
+//     }
+//     return res, nil
+// }
 
 func (s *DashboardService) TotalMen(ctx context.Context, req *pb.TotalMenReq) (*pb.TotalMenRes, error) {
 	res, err := s.storage.DashboardS.TotalMen(req)
@@ -105,4 +105,20 @@ func (s *DashboardService) GetGenderCounts(ctx context.Context, req *pb.TotalGen
 		return nil, err
 	}
 	return res, nil
+}
+
+func (s *DashboardService) GetRevenueByTariff(ctx context.Context, req *pb.TotalRevenueReq) (*pb.TariffRevenueRes, error) {
+	res, err := s.storage.DashboardS.GetRevenueByTariff(req)
+    if err!= nil {
+        return nil, err
+    }
+    return res, nil
+}
+
+func (s *DashboardService) GetUsersByTariff(ctx context.Context, req *pb.TotalUsersReq) (*pb.TariffUsersRes, error) {
+	res, err := s.storage.DashboardS.GetUsersByTariff(req)
+    if err!= nil {
+        return nil, err
+    }
+    return res, nil
 }

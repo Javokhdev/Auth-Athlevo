@@ -5,10 +5,10 @@ option go_package = "genproto/auth";
 package auth;
 
 service DashboardService {
-    rpc GetDailyPersonalAccessCount(AccessCountReq) returns (AccessCountRes);
-    rpc GetDailyPersonalBookingRevenueByDay(BookingRevenueReq) returns (BookingRevenueRes);
-    rpc GetDailyAccessCountBySubscriptionID(SubscriptionCountReq) returns (SubscriptionCountRes);
-    rpc GetDailyBookingRevenueBySubscriptionID(BookingRevenueBySubscriptionReq) returns (BookingRevenueBySubscriptionRes);
+    // rpc GetDailyPersonalAccessCount(AccessCountReq) returns (AccessCountRes);
+    // rpc GetDailyPersonalBookingRevenueByDay(BookingRevenueReq) returns (BookingRevenueRes);
+    // rpc GetDailyAccessCountBySubscriptionID(SubscriptionCountReq) returns (SubscriptionCountRes);
+    // rpc GetDailyBookingRevenueBySubscriptionID(BookingRevenueBySubscriptionReq) returns (BookingRevenueBySubscriptionRes);
     rpc TotalMen(TotalMenReq) returns (TotalMenRes);
     rpc TotalWomen(TotalWomenReq) returns (TotalWomenRes);
     rpc TotalMembers(TotalMembersReq) returns (TotalMembersRes);
@@ -16,67 +16,69 @@ service DashboardService {
     rpc CompareCurrentAndPreviousMonthRevenue(Void) returns (RevenueReq);
     rpc GetMonthlyRevenueStats(Void) returns (MonthlyRevenueRes);
     rpc GetGenderCounts(TotalGenderReq) returns (GenderCountsRes);
+    rpc GetRevenueByTariff(TotalRevenueReq) returns (TariffRevenueRes);
+    rpc GetUsersByTariff(TotalUsersReq) returns (TariffUsersRes); 
 }
 
-message AccessCountReq {
-    string gymId = 1;
-    string startDate = 2;
-    string endDate = 3;
-}
+// message AccessCountReq {
+//     string gymId = 1;
+//     string startDate = 2;
+//     string endDate = 3;
+// }
 
-message AccessCount {
-    string accessDate = 1;
-    int32 accessCount = 2;
-}
+// message AccessCount {
+//     string accessDate = 1;
+//     int32 accessCount = 2;
+// }
 
-message AccessCountRes {
-    repeated AccessCount accessCountList = 1;
-}
+// message AccessCountRes {
+//     repeated AccessCount accessCountList = 1;
+// }
 
-message BookingRevenueReq {
-    string gymId = 1;
-    string startDate = 2;
-    string endDate = 3;
-}
+// message BookingRevenueReq {
+//     string gymId = 1;
+//     string startDate = 2;
+//     string endDate = 3;
+// }
 
-message BookingRevenue{
-    string bookingDate = 1;
-    float averageRevenue = 2;
-}
+// message BookingRevenue{
+//     string bookingDate = 1;
+//     float averageRevenue = 2;
+// }
 
-message BookingRevenueRes {
-    repeated BookingRevenue bookingRevenueList = 1;
-}
+// message BookingRevenueRes {
+//     repeated BookingRevenue bookingRevenueList = 1;
+// }
 
-message SubscriptionCountReq {
-    string subscriptionID = 1;
-    string startDate = 2;
-    string endDate = 3;
-}
+// message SubscriptionCountReq {
+//     string subscriptionID = 1;
+//     string startDate = 2;
+//     string endDate = 3;
+// }
 
-message SubscriptionCount{
-    string accessDate = 1;
-    int32 accessCount = 2;
-}
+// message SubscriptionCount{
+//     string accessDate = 1;
+//     int32 accessCount = 2;
+// }
 
-message SubscriptionCountRes {
-    repeated SubscriptionCount subscriptionCountList = 1;
-}
+// message SubscriptionCountRes {
+//     repeated SubscriptionCount subscriptionCountList = 1;
+// }
 
-message BookingRevenueBySubscriptionReq {
-    string subscriptionID = 1;
-    string startDate = 2;
-    string endDate = 3;
-}
+// message BookingRevenueBySubscriptionReq {
+//     string subscriptionID = 1;
+//     string startDate = 2;
+//     string endDate = 3;
+// }
 
-message BookingRevenueBySubscription{
-    string bookingDate = 1;
-    float averageRevenue = 2;
-}
+// message BookingRevenueBySubscription{
+//     string bookingDate = 1;
+//     float averageRevenue = 2;
+// }
 
-message BookingRevenueBySubscriptionRes {
-    repeated BookingRevenueBySubscription bookingRevenueBySubscriptionList = 1;
-}
+// message BookingRevenueBySubscriptionRes {
+//     repeated BookingRevenueBySubscription bookingRevenueBySubscriptionList = 1;
+// }
 
 message TotalMenReq {
     string gymId = 1;
@@ -155,4 +157,30 @@ message TotalGenderReq {
 message GenderCountsRes {
     int32 totalMen = 1;
     int32 totalWomen = 2;
+}
+
+message TotalRevenueReq {
+    string gymId = 1;
+}
+
+message TariffAmount {
+    string tariffName = 1;
+    float amount = 2;
+}
+
+message TariffRevenueRes {
+    repeated TariffAmount tariffAmounts = 1;
+}
+
+message TotalUsersReq {
+    string gymId = 1;
+}
+
+message TariffUsers {
+    string tariffName = 1;
+    int32 numOfUsers = 2;
+}
+
+message TariffUsersRes {
+    repeated TariffUsers tariffUsers = 1;
 }

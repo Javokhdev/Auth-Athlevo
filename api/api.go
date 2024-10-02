@@ -53,10 +53,10 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 
 	dashboard := router.Group("/dashboard").Use(middleware.JWTMiddleware(), middleware.CasbinMiddleware(ca))
 	{
-		dashboard.GET("/access-count", handler.GetPersonalAccessCount)
-        dashboard.GET("/booking-revenue", handler.GetTotalPersonalBookingRevenue)
-		dashboard.GET("/subscription/access-count", handler.GetAccessCountBySubscriptionID)
-		dashboard.GET("/subscription/booking-revenue", handler.GetBookingRevenueBySubscriptionID)
+		// dashboard.GET("/access-count", handler.GetPersonalAccessCount)
+        // dashboard.GET("/booking-revenue", handler.GetTotalPersonalBookingRevenue)
+		// dashboard.GET("/subscription/access-count", handler.GetAccessCountBySubscriptionID)
+		// dashboard.GET("/subscription/booking-revenue", handler.GetBookingRevenueBySubscriptionID)
 		dashboard.GET("/total-amount", handler.TotalAmount)
 		dashboard.GET("/total-members", handler.TotalMembers)
 		dashboard.GET("/total-men", handler.TotalMen)
@@ -64,6 +64,8 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 		dashboard.GET("/monthly-renue-stats", handler.GetMonthlyRevenueStats)
 		dashboard.GET("/compare-month-revenue", handler.CompareCurrentAndPreviousMonthRevenue)
 		dashboard.GET("/gender", handler.GetGenderCounts)
+		dashboard.GET("/revenue-by-subscription", handler.GetRevenueByTariff)
+		dashboard.GET("/users-by-subscription", handler.GetUsersByTariff)
 	}
 
 	return router

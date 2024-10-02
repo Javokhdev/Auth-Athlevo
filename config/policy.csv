@@ -12,15 +12,7 @@ p, admin, /user/setting, GET
 p, admin, /user/settting, PUT
 p, admin, /user/delete/:id, DELETE
 
-p, user, /dashboard/access-count, GET
-p, user, /dashboard/booking-revenue, GET
-p, user, /dashboard/subscription/access-count, GET
-p, user, /dashboard/subscription/booking-revenue, GET
 
-p, admin, /dashboard/access-count, GET
-p, admin, /dashboard/booking-revenue, GET
-p, admin, /dashboard/subscription/access-count, GET
-p, admin, /dashboard/subscription/booking-revenue, GET
 p, admin, /dashboard/total-men, GET
 p, admin, /dashboard/total-women, GET
 p, admin, /dashboard/total-amount, GET
@@ -28,3 +20,5 @@ p, admin, /dashboard/total-members, GET
 p, admin, /dashboard/monthly-renue-stats, GET
 p, admin, /dashboard/compare-month-revenue, GET
 p, admin, /dashboard/gender, GET
+p, admin, /dashboard/revenue-by-subscription, GET
+p, admin, /dashboard/users-by-subscription, GET

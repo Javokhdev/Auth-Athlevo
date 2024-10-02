@@ -28,10 +28,10 @@ type UserI interface {
 }
 
 type DashboardI interface { 
-    GetDailyPersonalAccessCount(*pb.AccessCountReq) (*pb.AccessCountRes, error)
-    GetDailyPersonalBookingRevenueByDay(*pb.BookingRevenueReq) (*pb.BookingRevenueRes, error)
-    GetDailyAccessCountBySubscriptionID(*pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error)
-    GetDailyBookingRevenueBySubscriptionID(*pb.BookingRevenueBySubscriptionReq) (*pb.BookingRevenueBySubscriptionRes, error)
+    // GetDailyPersonalAccessCount(*pb.AccessCountReq) (*pb.AccessCountRes, error)
+    // GetDailyPersonalBookingRevenueByDay(*pb.BookingRevenueReq) (*pb.BookingRevenueRes, error)
+    // GetDailyAccessCountBySubscriptionID(*pb.SubscriptionCountReq) (*pb.SubscriptionCountRes, error)
+    // GetDailyBookingRevenueBySubscriptionID(*pb.BookingRevenueBySubscriptionReq) (*pb.BookingRevenueBySubscriptionRes, error)
     TotalMen(*pb.TotalMenReq) (*pb.TotalMenRes, error)
     TotalWomen(*pb.TotalWomenReq) (*pb.TotalWomenRes, error)
     TotalMembers(*pb.TotalMembersReq) (*pb.TotalMembersRes, error)
@@ -39,4 +39,6 @@ type DashboardI interface {
     CompareCurrentAndPreviousMonthRevenue(*pb.Void) (*pb.RevenueReq, error)
     GetMonthlyRevenueStats(*pb.Void) (*pb.MonthlyRevenueRes, error)
     GetGenderCounts(*pb.TotalGenderReq) (*pb.GenderCountsRes, error)
+    GetRevenueByTariff(*pb.TotalRevenueReq) (*pb.TariffRevenueRes, error)
+    GetUsersByTariff(*pb.TotalUsersReq) (*pb.TariffUsersRes, error)
 }

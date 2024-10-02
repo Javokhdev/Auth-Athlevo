@@ -66,132 +66,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/dashboard/access-count": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Get the number of times a gym accessed the gym within the specified date range",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "dashboard"
-                ],
-                "summary": "Get the access count of a gym",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "gym ID",
-                        "name": "gym_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start Date",
-                        "name": "start_date",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "End Date",
-                        "name": "end_date",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/auth.AccessCountRes"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/dashboard/booking-revenue": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Get the total booking revenue within the specified date range for a gym",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "dashboard"
-                ],
-                "summary": "Get total booking revenue for a gym",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "gym ID",
-                        "name": "gym_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start Date",
-                        "name": "start_date",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "End Date",
-                        "name": "end_date",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/auth.BookingRevenueRes"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/dashboard/compare-month-revenue": {
             "get": {
                 "security": [
@@ -335,14 +209,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/dashboard/subscription/access-count": {
+        "/dashboard/revenue-by-tariff": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get the number of times a user accessed the gym based on subscription ID within a date range",
+                "description": "Get the revenue by Tariff",
                 "consumes": [
                     "application/json"
                 ],
@@ -352,26 +226,12 @@ const docTemplate = `{
                 "tags": [
                     "dashboard"
                 ],
-                "summary": "Get the access count by subscription ID",
+                "summary": "Get the revenue by Tariff",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Subscription ID",
-                        "name": "subscription_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start Date",
-                        "name": "start_date",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "End Date",
-                        "name": "end_date",
+                        "description": "Gym ID",
+                        "name": "gym_id",
                         "in": "query",
                         "required": true
                     }
@@ -380,70 +240,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/auth.SubscriptionCountRes"
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/dashboard/subscription/booking-revenue": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Get total booking revenue based on subscription ID within a date range",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "dashboard"
-                ],
-                "summary": "Get booking revenue by subscription ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Subscription ID",
-                        "name": "subscription_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Start Date",
-                        "name": "start_date",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "End Date",
-                        "name": "end_date",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/auth.BookingRevenueBySubscriptionRes"
+                            "$ref": "#/definitions/auth.TariffRevenueRes"
                         }
                     },
                     "400": {
@@ -640,6 +437,55 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/auth.TotalWomenRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/dashboard/users-by-subscription": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get users by tariff",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get users by tariff",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.TariffUsersRes"
                         }
                     },
                     "400": {
@@ -1247,72 +1093,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "auth.AccessCount": {
-            "type": "object",
-            "properties": {
-                "accessCount": {
-                    "type": "integer"
-                },
-                "accessDate": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.AccessCountRes": {
-            "type": "object",
-            "properties": {
-                "accessCountList": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth.AccessCount"
-                    }
-                }
-            }
-        },
-        "auth.BookingRevenue": {
-            "type": "object",
-            "properties": {
-                "averageRevenue": {
-                    "type": "number"
-                },
-                "bookingDate": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.BookingRevenueBySubscription": {
-            "type": "object",
-            "properties": {
-                "averageRevenue": {
-                    "type": "number"
-                },
-                "bookingDate": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.BookingRevenueBySubscriptionRes": {
-            "type": "object",
-            "properties": {
-                "bookingRevenueBySubscriptionList": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth.BookingRevenueBySubscription"
-                    }
-                }
-            }
-        },
-        "auth.BookingRevenueRes": {
-            "type": "object",
-            "properties": {
-                "bookingRevenueList": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/auth.BookingRevenue"
-                    }
-                }
-            }
-        },
         "auth.ChangePasswordReqBody": {
             "type": "object",
             "properties": {
@@ -1495,24 +1275,46 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.SubscriptionCount": {
+        "auth.TariffAmount": {
             "type": "object",
             "properties": {
-                "accessCount": {
-                    "type": "integer"
+                "amount": {
+                    "type": "number"
                 },
-                "accessDate": {
+                "tariffName": {
                     "type": "string"
                 }
             }
         },
-        "auth.SubscriptionCountRes": {
+        "auth.TariffRevenueRes": {
             "type": "object",
             "properties": {
-                "subscriptionCountList": {
+                "tariffAmounts": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/auth.SubscriptionCount"
+                        "$ref": "#/definitions/auth.TariffAmount"
+                    }
+                }
+            }
+        },
+        "auth.TariffUsers": {
+            "type": "object",
+            "properties": {
+                "numOfUsers": {
+                    "type": "integer"
+                },
+                "tariffName": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.TariffUsersRes": {
+            "type": "object",
+            "properties": {
+                "tariffUsers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.TariffUsers"
                     }
                 }
             }
