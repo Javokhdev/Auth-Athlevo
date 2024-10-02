@@ -530,22 +530,22 @@ func (r *DashboardRepo) GetMonthlyRevenueStats(req *pb.Void) (*pb.MonthlyRevenue
 	return revenues, nil
 }
 
-func (r *DashboardRepo) GetGenderCounts(gymId *pb.TotalGenderReq) (*pb.GenderCountsRes, error) {
+func (r *DashboardRepo) GetGenderCounts(gymReq *pb.TotalGenderReq) (*pb.GenderCountsRes, error) {
     var totalMen, totalWomen int32
 
     query := `
         SELECT 
-		COUNT(CASE WHEN u.gender = 'male' THEN 1 END) AS total_men,
-		COUNT(CASE WHEN u.gender = 'female' THEN 1 END) AS total_women
-	FROM users u
-	JOIN booking_personal b ON u.id = b.user_id
-	WHERE b.start_date >= CURRENT_DATE - INTERVAL '7 days' 
-	AND b.start_date < CURRENT_DATE 
-	AND u.gym_id = $1 
-	AND u.deleted_at = 0
+            COUNT(CASE WHEN u.gender = 'male' THEN 1 END) AS total_men,
+            COUNT(CASE WHEN u.gender = 'female' THEN 1 END) AS total_women
+        FROM users u
+        JOIN booking_personal b ON u.id = b.user_id
+        WHERE b.start_date >= CURRENT_DATE - INTERVAL '7 days' 
+        AND b.start_date < CURRENT_DATE 
+        AND u.gym_id = $1 
+        AND u.deleted_at = 0
     `
 
-    err := r.db.QueryRow(query, gymId).Scan(&totalMen, &totalWomen)
+    err := r.db.QueryRow(query, gymReq.GymId).Scan(&totalMen, &totalWomen)
     if err != nil {
         return nil, fmt.Errorf("failed to get gender counts: %w", err)
     }
@@ -555,3 +555,4 @@ func (r *DashboardRepo) GetGenderCounts(gymId *pb.TotalGenderReq) (*pb.GenderCou
         TotalWomen: totalWomen,
     }, nil
 }
+
