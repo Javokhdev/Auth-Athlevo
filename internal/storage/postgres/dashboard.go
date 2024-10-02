@@ -539,13 +539,13 @@ func (r *DashboardRepo) GetGenderCounts(gymReq *pb.TotalGenderReq) (*pb.GenderCo
             COUNT(CASE WHEN u.gender = 'female' THEN 1 END) AS total_women
         FROM users u
         JOIN booking_personal b ON u.id = b.user_id
-        WHERE b.start_date >= CURRENT_DATE - INTERVAL '7 days' 
-        AND b.start_date < CURRENT_DATE 
+        WHERE b.start_date >= $2
+        AND b.start_date < $3
         AND u.gym_id = $1 
         AND u.deleted_at = 0
     `
 
-    err := r.db.QueryRow(query, gymReq.GymId).Scan(&totalMen, &totalWomen)
+    err := r.db.QueryRow(query, gymReq.GymId, gymReq.StartDate, gymReq.EndDate).Scan(&totalMen, &totalWomen)
     if err != nil {
         return nil, fmt.Errorf("failed to get gender counts: %w", err)
     }
@@ -555,4 +555,3 @@ func (r *DashboardRepo) GetGenderCounts(gymReq *pb.TotalGenderReq) (*pb.GenderCo
         TotalWomen: totalWomen,
     }, nil
 }
-

@@ -148,6 +148,8 @@ message MonthlyRevenueRes {
 
 message TotalGenderReq {
     string gymId = 1;
+    string startDate = 2;
+    string endDate = 3;
 }
 
 message GenderCountsRes {

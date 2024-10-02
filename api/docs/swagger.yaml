@@ -404,11 +404,22 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get the total count of gender members for a specified gym
+      description: Get the total count of gender members for a specified gym and date
+        range
       parameters:
       - description: Gym ID
         in: query
         name: gym_id
+        required: true
+        type: string
+      - description: Start Date (YYYY-MM-DD)
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date (YYYY-MM-DD)
+        in: query
+        name: end_date
         required: true
         type: string
       produces:
@@ -428,7 +439,8 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get the total number of gender in a gym
+      summary: Get the total number of males and females in a gym within a specified
+        date range
       tags:
       - dashboard
   /dashboard/monthly-renue-stats:

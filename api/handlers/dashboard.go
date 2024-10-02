@@ -355,35 +355,41 @@ func (h *Handlers) GetMonthlyRevenueStats(c *gin.Context) {
 }
 
 // GetGenderCounts godoc
-// @Summary Get the total number of gender in a gym
-// @Description Get the total count of gender members for a specified gym
+// @Summary Get the total number of males and females in a gym within a specified date range
+// @Description Get the total count of gender members for a specified gym and date range
 // @Tags dashboard
 // @Accept json
 // @Produce json
 // @Security BearerAuth
 // @Param gym_id query string true "Gym ID"
+// @Param start_date query string true "Start Date (YYYY-MM-DD)"
+// @Param end_date query string true "End Date (YYYY-MM-DD)"
 // @Success 200 {object} auth.GenderCountsRes
 // @Failure 400 {object} string "Invalid Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /dashboard/gender [get]
 func (h *Handlers) GetGenderCounts(c *gin.Context) {
-	gymID := c.Query("gym_id")
+    gymID := c.Query("gym_id")
+    startDate := c.Query("start_date")
+    endDate := c.Query("end_date")
 
-	if gymID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
-		return
-	}
+    if gymID == "" || startDate == "" || endDate == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "missing required query parameters"})
+        return
+    }
 
-	req := auth.TotalGenderReq{
-		GymId: gymID,
-	}
+    req := auth.TotalGenderReq{
+        GymId:     gymID,
+        StartDate: startDate,
+        EndDate:   endDate,
+    }
 
-	res, err := h.Dashboard.GetGenderCounts(context.Background(), &req)
-	if err != nil {
-		log.Printf("failed to get total gender: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
-		return
-	}
+    res, err := h.Dashboard.GetGenderCounts(context.Background(), &req)
+    if err != nil {
+        log.Printf("failed to get total gender: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+        return
+    }
 
-	c.JSON(http.StatusOK, res)
+    c.JSON(http.StatusOK, res)
 }

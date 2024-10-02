@@ -239,7 +239,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get the total count of gender members for a specified gym",
+                "description": "Get the total count of gender members for a specified gym and date range",
                 "consumes": [
                     "application/json"
                 ],
@@ -249,12 +249,26 @@ const docTemplate = `{
                 "tags": [
                     "dashboard"
                 ],
-                "summary": "Get the total number of gender in a gym",
+                "summary": "Get the total number of males and females in a gym within a specified date range",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Gym ID",
                         "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start Date (YYYY-MM-DD)",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date (YYYY-MM-DD)",
+                        "name": "end_date",
                         "in": "query",
                         "required": true
                     }
