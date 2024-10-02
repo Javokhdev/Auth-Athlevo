@@ -374,7 +374,7 @@ func (h *Handlers) GetGenderCounts(c *gin.Context) {
 		return
 	}
 
-	req := auth.TotalWomenReq{
+	req := auth.TotalGenderReq{
 		GymId: gymID,
 	}
 
