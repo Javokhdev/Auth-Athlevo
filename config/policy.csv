@@ -27,3 +27,4 @@ p, admin, /dashboard/total-amount, GET
 p, admin, /dashboard/total-members, GET
 p, admin, /dashboard/monthly-renue-stats, GET
 p, admin, /dashboard/compare-month-revenue, GET
+p, admin, /dashboard/gender, GET
