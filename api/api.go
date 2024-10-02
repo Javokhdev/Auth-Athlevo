@@ -63,7 +63,7 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 		dashboard.GET("/total-women", handler.TotalWomen)
 		dashboard.GET("/monthly-renue-stats", handler.GetMonthlyRevenueStats)
 		dashboard.GET("/compare-month-revenue", handler.CompareCurrentAndPreviousMonthRevenue)
-		dashboard.GET("/dashboard/gender", handler.GetGenderCounts)
+		dashboard.GET("/gender", handler.GetGenderCounts)
 	}
 
 	return router
