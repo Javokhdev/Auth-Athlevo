@@ -426,7 +426,7 @@ func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes,
 
 func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb.RevenueReq, error) {
 	query := `
-		WITH current_month_revenue AS (
+				WITH current_month_revenue AS (
 			SELECT 
 				SUM(payment) AS total_revenue
 			FROM (
@@ -438,6 +438,7 @@ func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb
 			) AS all_bookings
 			WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE)
 			AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+			AND EXTRACT(DAY FROM created_at) <= EXTRACT(DAY FROM CURRENT_DATE)
 		),
 		previous_month_revenue AS (
 			SELECT 
@@ -451,13 +452,16 @@ func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb
 			) AS all_bookings
 			WHERE EXTRACT(MONTH FROM created_at) = EXTRACT(MONTH FROM CURRENT_DATE) - 1
 			AND EXTRACT(YEAR FROM created_at) = EXTRACT(YEAR FROM CURRENT_DATE)
+			AND EXTRACT(DAY FROM created_at) <= EXTRACT(DAY FROM CURRENT_DATE)
 		)
 		SELECT 
 			CASE 
-				WHEN COALESCE(previous_month_revenue.total_revenue, 0) = 0 THEN 0
-				ELSE (COALESCE(current_month_revenue.total_revenue, 0) - previous_month_revenue.total_revenue) / previous_month_revenue.total_revenue * 100
+				WHEN COALESCE(previous_month_revenue.total_revenue, 0) = 0 AND COALESCE(current_month_revenue.total_revenue, 0) > 0 THEN 100
+				WHEN COALESCE(current_month_revenue.total_revenue, 0) = 0 THEN 0
+				WHEN COALESCE(current_month_revenue.total_revenue, 0) < previous_month_revenue.total_revenue THEN 0
+				ELSE (COALESCE(current_month_revenue.total_revenue, 0) / previous_month_revenue.total_revenue - 1) * 100
 			END AS revenue_change_percentage
-		FROM current_month_revenue, previous_month_revenue;
+		FROM current_month_revenue, previous_month_revenue
 	`
 
 	var percentageChange float64
