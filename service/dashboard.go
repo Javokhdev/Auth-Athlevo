@@ -98,3 +98,11 @@ func (s *DashboardService) GetMonthlyRevenueStats(ctx context.Context, req *pb.V
 	}
 	return res, nil
 }
+
+func (s *DashboardService) GetGenderCounts(ctx context.Context, req *pb.TotalGenderReq) (*pb.GenderCountsRes, error) {
+	res, err := s.storage.DashboardS.GetGenderCounts(req)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

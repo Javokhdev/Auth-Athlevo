@@ -15,6 +15,7 @@ service DashboardService {
     rpc TotalAmount(TotalAmountReq) returns (TotalAmountRes);
     rpc CompareCurrentAndPreviousMonthRevenue(Void) returns (RevenueReq);
     rpc GetMonthlyRevenueStats(Void) returns (MonthlyRevenueRes);
+    rpc GetGenderCounts(TotalGenderReq) returns (GenderCountsRes);
 }
 
 message AccessCountReq {
@@ -90,7 +91,6 @@ message TotalMenRes {
     repeated TotalMen totalMenList = 1;
 }
 
-
 message TotalWomenReq {
     string gymId = 1;
 }
@@ -144,4 +144,13 @@ message MonthlyRevenue {
     
 message MonthlyRevenueRes {
     repeated MonthlyRevenue monthlyRevenue = 1;
+}
+
+message TotalGenderReq {
+    string gymId = 1;
+}
+
+message GenderCountsRes {
+    int32 totalMen = 1;
+    int32 totalWomen = 2;
 }

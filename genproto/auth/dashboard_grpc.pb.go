@@ -29,6 +29,7 @@ const (
 	DashboardService_TotalAmount_FullMethodName                            = "/auth.DashboardService/TotalAmount"
 	DashboardService_CompareCurrentAndPreviousMonthRevenue_FullMethodName  = "/auth.DashboardService/CompareCurrentAndPreviousMonthRevenue"
 	DashboardService_GetMonthlyRevenueStats_FullMethodName                 = "/auth.DashboardService/GetMonthlyRevenueStats"
+	DashboardService_GetGenderCounts_FullMethodName                        = "/auth.DashboardService/GetGenderCounts"
 )
 
 // DashboardServiceClient is the client API for DashboardService service.
@@ -45,6 +46,7 @@ type DashboardServiceClient interface {
 	TotalAmount(ctx context.Context, in *TotalAmountReq, opts ...grpc.CallOption) (*TotalAmountRes, error)
 	CompareCurrentAndPreviousMonthRevenue(ctx context.Context, in *Void, opts ...grpc.CallOption) (*RevenueReq, error)
 	GetMonthlyRevenueStats(ctx context.Context, in *Void, opts ...grpc.CallOption) (*MonthlyRevenueRes, error)
+	GetGenderCounts(ctx context.Context, in *TotalGenderReq, opts ...grpc.CallOption) (*GenderCountsRes, error)
 }
 
 type dashboardServiceClient struct {
@@ -155,6 +157,16 @@ func (c *dashboardServiceClient) GetMonthlyRevenueStats(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *dashboardServiceClient) GetGenderCounts(ctx context.Context, in *TotalGenderReq, opts ...grpc.CallOption) (*GenderCountsRes, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenderCountsRes)
+	err := c.cc.Invoke(ctx, DashboardService_GetGenderCounts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DashboardServiceServer is the server API for DashboardService service.
 // All implementations must embed UnimplementedDashboardServiceServer
 // for forward compatibility.
@@ -169,6 +181,7 @@ type DashboardServiceServer interface {
 	TotalAmount(context.Context, *TotalAmountReq) (*TotalAmountRes, error)
 	CompareCurrentAndPreviousMonthRevenue(context.Context, *Void) (*RevenueReq, error)
 	GetMonthlyRevenueStats(context.Context, *Void) (*MonthlyRevenueRes, error)
+	GetGenderCounts(context.Context, *TotalGenderReq) (*GenderCountsRes, error)
 	mustEmbedUnimplementedDashboardServiceServer()
 }
 
@@ -208,6 +221,9 @@ func (UnimplementedDashboardServiceServer) CompareCurrentAndPreviousMonthRevenue
 }
 func (UnimplementedDashboardServiceServer) GetMonthlyRevenueStats(context.Context, *Void) (*MonthlyRevenueRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMonthlyRevenueStats not implemented")
+}
+func (UnimplementedDashboardServiceServer) GetGenderCounts(context.Context, *TotalGenderReq) (*GenderCountsRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGenderCounts not implemented")
 }
 func (UnimplementedDashboardServiceServer) mustEmbedUnimplementedDashboardServiceServer() {}
 func (UnimplementedDashboardServiceServer) testEmbeddedByValue()                          {}
@@ -410,6 +426,24 @@ func _DashboardService_GetMonthlyRevenueStats_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DashboardService_GetGenderCounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TotalGenderReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DashboardServiceServer).GetGenderCounts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DashboardService_GetGenderCounts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DashboardServiceServer).GetGenderCounts(ctx, req.(*TotalGenderReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DashboardService_ServiceDesc is the grpc.ServiceDesc for DashboardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -456,6 +490,10 @@ var DashboardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMonthlyRevenueStats",
 			Handler:    _DashboardService_GetMonthlyRevenueStats_Handler,
+		},
+		{
+			MethodName: "GetGenderCounts",
+			Handler:    _DashboardService_GetGenderCounts_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

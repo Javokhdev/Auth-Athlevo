@@ -38,4 +38,5 @@ type DashboardI interface {
     TotalAmount(*pb.TotalAmountReq) (*pb.TotalAmountRes, error)
     CompareCurrentAndPreviousMonthRevenue(*pb.Void) (*pb.RevenueReq, error)
     GetMonthlyRevenueStats(*pb.Void) (*pb.MonthlyRevenueRes, error)
+    GetGenderCounts(*pb.TotalGenderReq) (*pb.GenderCountsRes, error)
 }

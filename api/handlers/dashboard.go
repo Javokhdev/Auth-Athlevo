@@ -353,3 +353,37 @@ func (h *Handlers) GetMonthlyRevenueStats(c *gin.Context) {
 
 	c.JSON(http.StatusOK, res)
 }
+
+// GetGenderCounts godoc
+// @Summary Get the total number of gender in a gym
+// @Description Get the total count of gender members for a specified gym
+// @Tags dashboard
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param gym_id query string true "Gym ID"
+// @Success 200 {object} auth.GenderCountsRes
+// @Failure 400 {object} string "Invalid Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /dashboard/gender [get]
+func (h *Handlers) GetGenderCounts(c *gin.Context) {
+	gymID := c.Query("gym_id")
+
+	if gymID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
+		return
+	}
+
+	req := auth.TotalWomenReq{
+		GymId: gymID,
+	}
+
+	res, err := h.Dashboard.GetGenderCounts(context.Background(), &req)
+	if err != nil {
+		log.Printf("failed to get total gender: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+}
