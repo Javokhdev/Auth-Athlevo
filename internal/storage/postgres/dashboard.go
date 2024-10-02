@@ -556,7 +556,7 @@ func (r *DashboardRepo) GetGenderCounts(gymReq *pb.TotalGenderReq) (*pb.GenderCo
     }, nil
 }
 
-func (r *DashboardRepo) GetRevenueByTariff(gymReq *pb.TotalRevenueReq) (*pb.TariffRevenueRes, error) {
+func (r *DashboardRepo) GetRevenueByTariff(req *pb.Void) (*pb.TariffRevenueRes, error) {
 
     query := `
         SELECT 
@@ -568,7 +568,7 @@ func (r *DashboardRepo) GetRevenueByTariff(gymReq *pb.TotalRevenueReq) (*pb.Tari
 			type
     `
 
-    rows, err := r.db.Query(query, gymReq.GymId)
+    rows, err := r.db.Query(query)
     if err != nil {
         return nil, fmt.Errorf("failed to get revenue by tariff: %w", err)
     }
@@ -589,7 +589,7 @@ func (r *DashboardRepo) GetRevenueByTariff(gymReq *pb.TotalRevenueReq) (*pb.Tari
     }, nil
 }
 
-func (r *DashboardRepo) GetUsersByTariff(gymReq *pb.TotalUsersReq) (*pb.TariffUsersRes, error) {
+func (r *DashboardRepo) GetUsersByTariff(req *pb.Void) (*pb.TariffUsersRes, error) {
 
     query := `
         SELECT 
@@ -601,7 +601,7 @@ func (r *DashboardRepo) GetUsersByTariff(gymReq *pb.TotalUsersReq) (*pb.TariffUs
 			type
     `
 
-    rows, err := r.db.Query(query, gymReq.GymId)
+    rows, err := r.db.Query(query)
     if err != nil {
         return nil, fmt.Errorf("failed to get users by tariff: %w", err)
     }

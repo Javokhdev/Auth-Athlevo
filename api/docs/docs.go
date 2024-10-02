@@ -227,15 +227,6 @@ const docTemplate = `{
                     "dashboard"
                 ],
                 "summary": "Get the revenue by Tariff",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Gym ID",
-                        "name": "gym_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -472,15 +463,6 @@ const docTemplate = `{
                     "dashboard"
                 ],
                 "summary": "Get users by tariff",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Gym ID",
-                        "name": "gym_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",

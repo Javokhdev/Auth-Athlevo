@@ -45,8 +45,8 @@ type DashboardServiceClient interface {
 	CompareCurrentAndPreviousMonthRevenue(ctx context.Context, in *Void, opts ...grpc.CallOption) (*RevenueReq, error)
 	GetMonthlyRevenueStats(ctx context.Context, in *Void, opts ...grpc.CallOption) (*MonthlyRevenueRes, error)
 	GetGenderCounts(ctx context.Context, in *TotalGenderReq, opts ...grpc.CallOption) (*GenderCountsRes, error)
-	GetRevenueByTariff(ctx context.Context, in *TotalRevenueReq, opts ...grpc.CallOption) (*TariffRevenueRes, error)
-	GetUsersByTariff(ctx context.Context, in *TotalUsersReq, opts ...grpc.CallOption) (*TariffUsersRes, error)
+	GetRevenueByTariff(ctx context.Context, in *Void, opts ...grpc.CallOption) (*TariffRevenueRes, error)
+	GetUsersByTariff(ctx context.Context, in *Void, opts ...grpc.CallOption) (*TariffUsersRes, error)
 }
 
 type dashboardServiceClient struct {
@@ -127,7 +127,7 @@ func (c *dashboardServiceClient) GetGenderCounts(ctx context.Context, in *TotalG
 	return out, nil
 }
 
-func (c *dashboardServiceClient) GetRevenueByTariff(ctx context.Context, in *TotalRevenueReq, opts ...grpc.CallOption) (*TariffRevenueRes, error) {
+func (c *dashboardServiceClient) GetRevenueByTariff(ctx context.Context, in *Void, opts ...grpc.CallOption) (*TariffRevenueRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TariffRevenueRes)
 	err := c.cc.Invoke(ctx, DashboardService_GetRevenueByTariff_FullMethodName, in, out, cOpts...)
@@ -137,7 +137,7 @@ func (c *dashboardServiceClient) GetRevenueByTariff(ctx context.Context, in *Tot
 	return out, nil
 }
 
-func (c *dashboardServiceClient) GetUsersByTariff(ctx context.Context, in *TotalUsersReq, opts ...grpc.CallOption) (*TariffUsersRes, error) {
+func (c *dashboardServiceClient) GetUsersByTariff(ctx context.Context, in *Void, opts ...grpc.CallOption) (*TariffUsersRes, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TariffUsersRes)
 	err := c.cc.Invoke(ctx, DashboardService_GetUsersByTariff_FullMethodName, in, out, cOpts...)
@@ -162,8 +162,8 @@ type DashboardServiceServer interface {
 	CompareCurrentAndPreviousMonthRevenue(context.Context, *Void) (*RevenueReq, error)
 	GetMonthlyRevenueStats(context.Context, *Void) (*MonthlyRevenueRes, error)
 	GetGenderCounts(context.Context, *TotalGenderReq) (*GenderCountsRes, error)
-	GetRevenueByTariff(context.Context, *TotalRevenueReq) (*TariffRevenueRes, error)
-	GetUsersByTariff(context.Context, *TotalUsersReq) (*TariffUsersRes, error)
+	GetRevenueByTariff(context.Context, *Void) (*TariffRevenueRes, error)
+	GetUsersByTariff(context.Context, *Void) (*TariffUsersRes, error)
 	mustEmbedUnimplementedDashboardServiceServer()
 }
 
@@ -195,10 +195,10 @@ func (UnimplementedDashboardServiceServer) GetMonthlyRevenueStats(context.Contex
 func (UnimplementedDashboardServiceServer) GetGenderCounts(context.Context, *TotalGenderReq) (*GenderCountsRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGenderCounts not implemented")
 }
-func (UnimplementedDashboardServiceServer) GetRevenueByTariff(context.Context, *TotalRevenueReq) (*TariffRevenueRes, error) {
+func (UnimplementedDashboardServiceServer) GetRevenueByTariff(context.Context, *Void) (*TariffRevenueRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRevenueByTariff not implemented")
 }
-func (UnimplementedDashboardServiceServer) GetUsersByTariff(context.Context, *TotalUsersReq) (*TariffUsersRes, error) {
+func (UnimplementedDashboardServiceServer) GetUsersByTariff(context.Context, *Void) (*TariffUsersRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersByTariff not implemented")
 }
 func (UnimplementedDashboardServiceServer) mustEmbedUnimplementedDashboardServiceServer() {}
@@ -349,7 +349,7 @@ func _DashboardService_GetGenderCounts_Handler(srv interface{}, ctx context.Cont
 }
 
 func _DashboardService_GetRevenueByTariff_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TotalRevenueReq)
+	in := new(Void)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -361,13 +361,13 @@ func _DashboardService_GetRevenueByTariff_Handler(srv interface{}, ctx context.C
 		FullMethod: DashboardService_GetRevenueByTariff_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetRevenueByTariff(ctx, req.(*TotalRevenueReq))
+		return srv.(DashboardServiceServer).GetRevenueByTariff(ctx, req.(*Void))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _DashboardService_GetUsersByTariff_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TotalUsersReq)
+	in := new(Void)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -379,7 +379,7 @@ func _DashboardService_GetUsersByTariff_Handler(srv interface{}, ctx context.Con
 		FullMethod: DashboardService_GetUsersByTariff_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetUsersByTariff(ctx, req.(*TotalUsersReq))
+		return srv.(DashboardServiceServer).GetUsersByTariff(ctx, req.(*Void))
 	}
 	return interceptor(ctx, in, info, handler)
 }

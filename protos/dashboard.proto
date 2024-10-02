@@ -16,8 +16,8 @@ service DashboardService {
     rpc CompareCurrentAndPreviousMonthRevenue(Void) returns (RevenueReq);
     rpc GetMonthlyRevenueStats(Void) returns (MonthlyRevenueRes);
     rpc GetGenderCounts(TotalGenderReq) returns (GenderCountsRes);
-    rpc GetRevenueByTariff(TotalRevenueReq) returns (TariffRevenueRes);
-    rpc GetUsersByTariff(TotalUsersReq) returns (TariffUsersRes); 
+    rpc GetRevenueByTariff(Void) returns (TariffRevenueRes);
+    rpc GetUsersByTariff(Void) returns (TariffUsersRes); 
 }
 
 // message AccessCountReq {
@@ -159,10 +159,6 @@ message GenderCountsRes {
     int32 totalWomen = 2;
 }
 
-message TotalRevenueReq {
-    string gymId = 1;
-}
-
 message TariffAmount {
     string tariffName = 1;
     float amount = 2;
@@ -170,10 +166,6 @@ message TariffAmount {
 
 message TariffRevenueRes {
     repeated TariffAmount tariffAmounts = 1;
-}
-
-message TotalUsersReq {
-    string gymId = 1;
 }
 
 message TariffUsers {

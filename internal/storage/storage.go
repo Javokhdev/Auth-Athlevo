@@ -39,6 +39,6 @@ type DashboardI interface {
     CompareCurrentAndPreviousMonthRevenue(*pb.Void) (*pb.RevenueReq, error)
     GetMonthlyRevenueStats(*pb.Void) (*pb.MonthlyRevenueRes, error)
     GetGenderCounts(*pb.TotalGenderReq) (*pb.GenderCountsRes, error)
-    GetRevenueByTariff(*pb.TotalRevenueReq) (*pb.TariffRevenueRes, error)
-    GetUsersByTariff(*pb.TotalUsersReq) (*pb.TariffUsersRes, error)
+    GetRevenueByTariff(*pb.Void) (*pb.TariffRevenueRes, error)
+    GetUsersByTariff(*pb.Void) (*pb.TariffUsersRes, error)
 }

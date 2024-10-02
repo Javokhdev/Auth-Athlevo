@@ -401,24 +401,13 @@ func (h *Handlers) GetGenderCounts(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param gym_id query string true "Gym ID"
 // @Success 200 {object} auth.TariffRevenueRes
 // @Failure 400 {object} string "Invalid Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /dashboard/revenue-by-tariff [get]
 func (h *Handlers) GetRevenueByTariff(c *gin.Context) {
-    gymID := c.Query("gym_id")
 
-    if gymID == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
-        return
-    }
-
-    req := auth.TotalRevenueReq{
-        GymId: gymID,
-    }
-
-    res, err := h.Dashboard.GetRevenueByTariff(context.Background(), &req)
+    res, err := h.Dashboard.GetRevenueByTariff(context.Background(), &auth.Void{})
     if err != nil {
         log.Printf("failed to get revenue by tariff: %v", err)
         c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})
@@ -435,24 +424,13 @@ func (h *Handlers) GetRevenueByTariff(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
-// @Param gym_id query string true "Gym ID"
 // @Success 200 {object} auth.TariffUsersRes
 // @Failure 400 {object} string "Invalid Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /dashboard/users-by-subscription [get]
 func (h *Handlers) GetUsersByTariff(c *gin.Context) {
-    gymID := c.Query("gym_id")
 
-    if gymID == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "missing required gym_id query parameter"})
-        return
-    }
-
-    req := auth.TotalUsersReq{
-        GymId: gymID,
-    }
-
-    res, err := h.Dashboard.GetUsersByTariff(context.Background(), &req)
+    res, err := h.Dashboard.GetUsersByTariff(context.Background(), &auth.Void{})
     if err != nil {
         log.Printf("failed to get users by tariff: %v", err)
         c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error", "details": err.Error()})

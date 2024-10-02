@@ -107,7 +107,7 @@ func (s *DashboardService) GetGenderCounts(ctx context.Context, req *pb.TotalGen
 	return res, nil
 }
 
-func (s *DashboardService) GetRevenueByTariff(ctx context.Context, req *pb.TotalRevenueReq) (*pb.TariffRevenueRes, error) {
+func (s *DashboardService) GetRevenueByTariff(ctx context.Context, req *pb.Void) (*pb.TariffRevenueRes, error) {
 	res, err := s.storage.DashboardS.GetRevenueByTariff(req)
     if err!= nil {
         return nil, err
@@ -115,7 +115,7 @@ func (s *DashboardService) GetRevenueByTariff(ctx context.Context, req *pb.Total
     return res, nil
 }
 
-func (s *DashboardService) GetUsersByTariff(ctx context.Context, req *pb.TotalUsersReq) (*pb.TariffUsersRes, error) {
+func (s *DashboardService) GetUsersByTariff(ctx context.Context, req *pb.Void) (*pb.TariffUsersRes, error) {
 	res, err := s.storage.DashboardS.GetUsersByTariff(req)
     if err!= nil {
         return nil, err

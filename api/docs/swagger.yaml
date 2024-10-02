@@ -361,12 +361,6 @@ paths:
       consumes:
       - application/json
       description: Get the revenue by Tariff
-      parameters:
-      - description: Gym ID
-        in: query
-        name: gym_id
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -516,12 +510,6 @@ paths:
       consumes:
       - application/json
       description: Get users by tariff
-      parameters:
-      - description: Gym ID
-        in: query
-        name: gym_id
-        required: true
-        type: string
       produces:
       - application/json
       responses:
