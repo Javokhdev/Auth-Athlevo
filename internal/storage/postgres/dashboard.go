@@ -470,6 +470,10 @@ func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb
 		return nil, fmt.Errorf("failed to get revenue change percentage: %w", err)
 	}
 
+	if percentageChange < 0 {
+		percentageChange = 0
+	}
+
 	return &pb.RevenueReq{
 		PercentageChange: float32(percentageChange),
 	}, nil
