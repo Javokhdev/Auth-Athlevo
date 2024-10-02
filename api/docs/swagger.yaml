@@ -67,6 +67,13 @@ definitions:
       username:
         type: string
     type: object
+  auth.GenderCountsRes:
+    properties:
+      totalMen:
+        type: integer
+      totalWomen:
+        type: integer
+    type: object
   auth.GetByEmail:
     properties:
       email:
@@ -391,6 +398,37 @@ paths:
       security:
       - BearerAuth: []
       summary: Compare current and previous
+      tags:
+      - dashboard
+  /dashboard/gender:
+    get:
+      consumes:
+      - application/json
+      description: Get the total count of gender members for a specified gym
+      parameters:
+      - description: Gym ID
+        in: query
+        name: gym_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.GenderCountsRes'
+        "400":
+          description: Invalid Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get the total number of gender in a gym
       tags:
       - dashboard
   /dashboard/monthly-renue-stats:

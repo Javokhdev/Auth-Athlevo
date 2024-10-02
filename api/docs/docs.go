@@ -232,6 +232,55 @@ const docTemplate = `{
                 }
             }
         },
+        "/dashboard/gender": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the total count of gender members for a specified gym",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dashboard"
+                ],
+                "summary": "Get the total number of gender in a gym",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Gym ID",
+                        "name": "gym_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.GenderCountsRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/dashboard/monthly-renue-stats": {
             "get": {
                 "security": [
@@ -1287,6 +1336,17 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "auth.GenderCountsRes": {
+            "type": "object",
+            "properties": {
+                "totalMen": {
+                    "type": "integer"
+                },
+                "totalWomen": {
+                    "type": "integer"
                 }
             }
         },
