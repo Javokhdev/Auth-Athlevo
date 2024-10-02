@@ -404,7 +404,7 @@ func (h *Handlers) GetGenderCounts(c *gin.Context) {
 // @Success 200 {object} auth.TariffRevenueRes
 // @Failure 400 {object} string "Invalid Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /dashboard/revenue-by-tariff [get]
+// @Router /dashboard/revenue-by-subscription [get]
 func (h *Handlers) GetRevenueByTariff(c *gin.Context) {
 
     res, err := h.Dashboard.GetRevenueByTariff(context.Background(), &auth.Void{})

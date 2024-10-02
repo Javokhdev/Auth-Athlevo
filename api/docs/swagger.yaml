@@ -356,7 +356,7 @@ paths:
       summary: Get monthly revenue
       tags:
       - dashboard
-  /dashboard/revenue-by-tariff:
+  /dashboard/revenue-by-subscription:
     get:
       consumes:
       - application/json

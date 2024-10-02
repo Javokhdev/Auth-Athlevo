@@ -209,7 +209,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/dashboard/revenue-by-tariff": {
+        "/dashboard/revenue-by-subscription": {
             "get": {
                 "security": [
                     {

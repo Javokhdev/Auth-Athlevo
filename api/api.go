@@ -64,7 +64,7 @@ func Engine(handler *handlers.Handlers) *gin.Engine {
 		dashboard.GET("/monthly-renue-stats", handler.GetMonthlyRevenueStats)
 		dashboard.GET("/compare-month-revenue", handler.CompareCurrentAndPreviousMonthRevenue)
 		dashboard.GET("/gender", handler.GetGenderCounts)
-		dashboard.GET("/revenue-by-tariff", handler.GetRevenueByTariff)
+		dashboard.GET("/revenue-by-subscription", handler.GetRevenueByTariff)
 		dashboard.GET("/users-by-subscription", handler.GetUsersByTariff)
 	}
 
