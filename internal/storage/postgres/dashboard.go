@@ -426,7 +426,7 @@ func (r *DashboardRepo) TotalAmount(req *pb.TotalAmountReq) (*pb.TotalAmountRes,
 
 func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb.RevenueReq, error) {
 	query := `
-				WITH current_month_revenue AS (
+		WITH current_month_revenue AS (
 			SELECT 
 				SUM(payment) AS total_revenue
 			FROM (
@@ -455,23 +455,32 @@ func (r *DashboardRepo) CompareCurrentAndPreviousMonthRevenue(req *pb.Void) (*pb
 			AND EXTRACT(DAY FROM created_at) <= EXTRACT(DAY FROM CURRENT_DATE)
 		)
 		SELECT 
-			CASE 
-				WHEN COALESCE(previous_month_revenue.total_revenue, 0) = 0 AND COALESCE(current_month_revenue.total_revenue, 0) > 0 THEN 100
-				WHEN COALESCE(current_month_revenue.total_revenue, 0) = 0 THEN 0
-				WHEN COALESCE(current_month_revenue.total_revenue, 0) < previous_month_revenue.total_revenue THEN 0
-				ELSE (COALESCE(current_month_revenue.total_revenue, 0) / previous_month_revenue.total_revenue - 1) * 100
-			END AS revenue_change_percentage
+			COALESCE(current_month_revenue.total_revenue, 0) AS current_revenue,
+			COALESCE(previous_month_revenue.total_revenue, 0) AS previous_revenue
 		FROM current_month_revenue, previous_month_revenue
 	`
 
-	var percentageChange float64
-	err := r.db.QueryRow(query).Scan(&percentageChange)
+	var currentRevenue, previousRevenue float64
+	err := r.db.QueryRow(query).Scan(&currentRevenue, &previousRevenue)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get revenue change percentage: %w", err)
+		return nil, fmt.Errorf("failed to get revenue data: %w", err)
+	}
+
+	var percentageChange float64
+	if previousRevenue == 0 {
+		if currentRevenue > 0 {
+			percentageChange = 100
+		} else {
+			percentageChange = 0
+		}
+	} else {
+		percentageChange = ((currentRevenue - previousRevenue) / previousRevenue) * 100
 	}
 
 	if percentageChange < 0 {
 		percentageChange = 0
+	} else if percentageChange > 100 {
+		percentageChange = 100
 	}
 
 	return &pb.RevenueReq{
